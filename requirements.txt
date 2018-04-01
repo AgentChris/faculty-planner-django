@@ -1,0 +1,10 @@
+Django==1.11.7
+django-cors-headers==2.1.0
+djangorestframework==3.7.3
+django-rest-swagger==2.1.2
+django-jsoneditor==0.0.12
+requests==2.18.4
+python-dateutil==2.6.1
+psycopg2==2.7.3.2
+uWSGI==2.0.15
+inflect==0.2.5

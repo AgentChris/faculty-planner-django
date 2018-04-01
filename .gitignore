@@ -1,2 +1,19 @@
+# IDE files
+**/*.swp
+.idea
+.vscode
 
-\.idea/
+# virtual env
+venv
+.venv
+.env
+
+# caches and compiled stuff
+**/__pycache__
+**/*.pyc
+
+.python-version
+.DS_Store
+
+
+ngrok
