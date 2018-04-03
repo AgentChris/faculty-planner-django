@@ -12,3 +12,5 @@ https://medium.com/@ianlancaster/deploying-your-react-app-to-aws-using-docker-pa
 <br />
 Aws pricing:
 https://aws.amazon.com/free/
+For parsing website:
+https://github.com/kennethreitz/requests-html
