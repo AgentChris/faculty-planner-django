@@ -1,4 +1,4 @@
-from .models import Student, Group, StudentSpecialization, SpecializationGroup, Specialization
+from .models import Student, StudentSpecialization, Specialization
 
 
 def store_specialization(student_uuid, specialization_uuid):
@@ -11,5 +11,6 @@ def store_specialization(student_uuid, specialization_uuid):
 
     return student_specialization
 
+# TODO: define service that will be used in the import part to save date
 
 
