@@ -114,6 +114,15 @@ class Language(models.Model):
 
 
 class Specialization(models.Model):
+    BACHELOR = 'BACHELOR'
+    MASTER = 'MASTER'
+    DOCTORAL = 'DOCTORAL'
+    DEGREE = (
+        (BACHELOR, 'BACHELOR'),
+        (MASTER, 'MASTER'),
+        (DOCTORAL, 'DOCTORAL'),
+    )
+
     class Meta:
         verbose_name = _('Specialization')
         verbose_name_plural = _('Specializations')
@@ -123,7 +132,7 @@ class Specialization(models.Model):
     group = models.ForeignKey(Group)
     language = models.ForeignKey(Language)
     name = models.CharField(max_length=256)
-    degree = models.CharField(max_length=128)
+    degree = models.CharField(max_length=50, choices=DEGREE, default=BACHELOR)
     with_frequency = models.BooleanField(default=True)
     year = models.DecimalField(max_digits=1, decimal_places=1)
     sem = models.DecimalField(max_digits=1, decimal_places=1)
@@ -154,7 +163,6 @@ class Schedule(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
-    course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')
     specialization = models.ForeignKey(Specialization)
 
 
