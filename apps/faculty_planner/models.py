@@ -102,6 +102,7 @@ class Faculty(models.Model):
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.CharField(max_length=128)
+    link = models.CharField(max_length=512)
 
 
 class Language(models.Model):
