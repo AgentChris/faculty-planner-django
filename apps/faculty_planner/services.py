@@ -60,7 +60,7 @@ def store_specialization(student_uuid, specialization_uuid):
 
 script_dir = os.path.dirname(__file__)
 print(script_dir)
-img_data = Image.open('/Users/cristian.poputea/projects/faculty-planner-django/apps/faculty_planner/test.png')
+img_data = Image.open('/Users/cristian.poputea/projects/faculty-planner-django/apps/faculty_planner/test2.png')
 
 text = image_to_string(img_data)
 print(text)
