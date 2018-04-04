@@ -1,3 +1,7 @@
+# PAGE0 = https://econ.ubbcluj.ro/
+# open the sidebar then search for "orar"
+# then you will obtain the anchor tag that has the PAGE1 URL
+
 # PAGE1 = https://econ.ubbcluj.ro/n2.php?id_c=135&id_m=7
 # Create Specialization model
 # Get faculty name
