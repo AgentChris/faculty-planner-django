@@ -5,7 +5,7 @@
 # PAGE1 = https://econ.ubbcluj.ro/n2.php?id_c=135&id_m=7
 # Create Specialization model
 # Get faculty name
-FACULTY_NAME = 'FSEGA'
+FACULTY_ACRONYM = 'FSEGA'
 # Get sem
 # Get all language
 # Get degree type
