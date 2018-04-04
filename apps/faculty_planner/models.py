@@ -102,6 +102,7 @@ class Faculty(models.Model):
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.CharField(max_length=128)
+    acronym = models.CharField(max_length=128)
     link = models.CharField(max_length=512)
 
 
@@ -133,6 +134,7 @@ class Specialization(models.Model):
     group = models.ForeignKey(Group)
     language = models.ForeignKey(Language)
     name = models.CharField(max_length=256)
+    acronym = models.CharField(max_length=128)
     degree = models.CharField(max_length=50, choices=DEGREE, default=BACHELOR)
     with_frequency = models.BooleanField(default=True)
     year = models.DecimalField(max_digits=1, decimal_places=1)
