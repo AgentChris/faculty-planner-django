@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from faculty_planner import services
+from .services import store_specialization
 from .models import StudentSuggestion, Specialization, Student, Schedule
 
 
@@ -48,8 +48,7 @@ def store_student_specialization(request, *args, **kwargs):
 
     specialization_uuid = body.get('specialization_uuid')
 
-    specialization = services \
-        .store_specialization(student_uuid=uuid, specialization_uuid=specialization_uuid)
+    specialization = store_specialization(student_uuid=uuid, specialization_uuid=specialization_uuid)
 
     return JsonResponse(specialization, safe=False)
 
