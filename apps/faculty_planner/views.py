@@ -1,10 +1,10 @@
 import json
 
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .services import store_specialization
 from .models import StudentSuggestion, Specialization, Student, Schedule
+from .parse_fsega import get_specialization_website_url
+from .services import store_specialization
 
 
 # from django.core.exceptions import ObjectDoesNotExist
@@ -14,9 +14,9 @@ from .models import StudentSuggestion, Specialization, Student, Schedule
 # from myngs.models import MyDashboardUserProfile
 
 
-@login_required
 def index(request):
-    raise NotImplemented
+    get_specialization_website_url()
+    return JsonResponse({}, safe=False)
 
 
 def get_schedule_by_specialization_uuid(request, *args, **kwargs):

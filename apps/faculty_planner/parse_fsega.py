@@ -1,11 +1,31 @@
+from requests_html import HTMLSession
+
+from .models import Faculty
+
+FACULTY_ACRONYM = 'FSEGA'
+
 # PAGE0 = https://econ.ubbcluj.ro/
 # open the sidebar then search for "orar"
 # then you will obtain the anchor tag that has the PAGE1 URL
 
+
+def get_specialization_website_url():
+    faculty = Faculty.objects.get(acronym=FACULTY_ACRONYM)
+    session = HTMLSession()
+
+    r = session.get(faculty.link)
+    anchors = r.html.find("a")
+    result = ""
+    for anchor in anchors:
+        if anchor.text.__contains__('Orar'):
+            result = anchor.links
+
+    return result
+
+
 # PAGE1 = https://econ.ubbcluj.ro/n2.php?id_c=135&id_m=7
 # Create Specialization model
 # Get faculty name
-FACULTY_ACRONYM = 'FSEGA'
 # Get sem
 # Get all language
 # Get degree type
@@ -30,4 +50,3 @@ FACULTY_ACRONYM = 'FSEGA'
 # Create Course Date
 
 # first crate schdule then add it to group by creating SchduleGroup Object
-
