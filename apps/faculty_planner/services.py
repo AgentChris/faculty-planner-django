@@ -28,6 +28,8 @@ def store_specialization(student_uuid, specialization_uuid):
 # https://econ.ubbcluj.ro/documente2015/01%20Lista%20candidati%20admisi%20pe%20programe%20MASTERAT%20ZI%20sept%202016.pdf
 # documentation
 # https://medium.com/@winston.smith.spb/python-ocr-for-pdf-or-compare-textract-pytesseract-and-pyocr-acb19122f38c
+# good youtube video
+# https://www.youtube.com/watch?v=-fIlUcp69xo
 # https://stackoverflow.com/questions/35609773/oserror-errno-2-no-such-file-or-directory-using-pytesser
 # https://stackoverflow.com/questions/20060096/installing-pil-with-pip
 # early results based on test.png:
