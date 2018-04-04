@@ -50,7 +50,7 @@ class Group(models.Model):
         verbose_name_plural = _('Groups')
 
     name = models.CharField(max_length=128)
-    sub_group = models.DecimalField(max_digits=1)
+    sub_group = models.DecimalField(max_digits=1, decimal_places=1)
 
 
 class CourseDate(models.Model):
@@ -125,8 +125,8 @@ class Specialization(models.Model):
     name = models.CharField(max_length=256)
     degree = models.CharField(max_length=128)
     with_frequency = models.BooleanField(default=True)
-    year = models.DecimalField(max_digits=1)
-    sem = models.DecimalField(max_digits=1)
+    year = models.DecimalField(max_digits=1, decimal_places=1)
+    sem = models.DecimalField(max_digits=1, decimal_places=1)
 
 
 class SpecializationGroup(models.Model):
