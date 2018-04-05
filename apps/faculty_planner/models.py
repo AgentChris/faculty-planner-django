@@ -131,9 +131,10 @@ class Specialization(models.Model):
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     faculty = models.ForeignKey(Faculty)
-    group = models.ForeignKey(Group)
+    groups = models.ManyToManyField(Group, through='SpecializationGroup')
     language = models.ForeignKey(Language)
     name = models.CharField(max_length=256)
+    link = models.CharField(max_length=512)
     acronym = models.CharField(max_length=128)
     degree = models.CharField(max_length=50, choices=DEGREE, default=BACHELOR)
     with_frequency = models.BooleanField(default=True)
@@ -166,7 +167,7 @@ class Schedule(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
-    specialization = models.ForeignKey(Specialization)
+    specialization_group = models.ForeignKey(SpecializationGroup)
 
 
 class ScheduleCourseDate(models.Model):

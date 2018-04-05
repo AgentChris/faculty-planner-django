@@ -1,8 +1,9 @@
 from requests_html import HTMLSession
 
-from .models import Faculty
+from .models import Faculty, Language, Specialization
 
 FACULTY_ACRONYM = 'FSEGA'
+
 
 # PAGE0 = https://econ.ubbcluj.ro/
 # open the sidebar then search for "orar"
@@ -15,10 +16,15 @@ def get_specialization_website_url():
 
     r = session.get(faculty.link)
     anchors = r.html.find("a")
-    result = ""
+    sem = 1
+
+    result = faculty.link
     for anchor in anchors:
         if anchor.text.__contains__('Orar'):
-            result = anchor.links
+            sem = anchor.text[-1]
+            result += list(anchor.links)[0]
+
+    create_specialization(faculty, result, sem)
 
     return result
 
@@ -32,10 +38,48 @@ def get_specialization_website_url():
 # Get specialization name
 # Get year
 
-# For each specialization first do this and then go for the next specialization
-# https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIG&an=1
-# https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIG&an=2
-# etc
+
+def create_specialization(faculty, link, sem):
+    session = HTMLSession()
+
+    r = session.get(link)
+    td = r.html.find("td")
+
+    for child_elem in td:
+        language = None
+        lists_ul = []
+
+        if child_elem.type == "ul":
+            lists_ul = child_elem
+
+        if child_elem.type == "p" and child_elem.proptype == "justify":
+            language_ro = child_elem.child.text
+            language = Language.objects.get_or_create(name=language_ro)
+
+        if child_elem.type == "b":
+            language_name = child_elem.text
+            language = Language.objects.get_or_create(name=language_name)
+
+        degree = ''
+        for childs_ul in lists_ul:
+            for elem in childs_ul:
+                if elem.type == 'b' and elem.text == 'Orar Licenta':
+                    degree = 'BACHELOR'
+                if elem.type == 'b' and elem.text == 'Orar Masterat':
+                    degree = 'MASTER'
+
+                if elem.type == 'a':
+                    link = elem.link
+                    elem_text = elem.text.split('-')
+                    name = elem_text[0]
+                    acronym = filter(str.isupper, name)
+                    year = int(elem_text[1][-1])
+
+                    Specialization.objects \
+                        .create(faculty=faculty, language=language, name=name, degree=degree,
+                                link=link, acronym=acronym, year=year, sem=sem)
+
+
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE
 
