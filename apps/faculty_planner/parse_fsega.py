@@ -1,10 +1,11 @@
 import lxml.html
 from requests_html import HTMLSession
 
-from .models import Faculty, Language, Specialization
+from .models import Faculty, Language, Specialization, Group
 
 FACULTY_ACRONYM = 'FSEGA'
 PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
+TEXT_STRING = ['\t', '\n', '\r']
 
 
 # PAGE0 = https://econ.ubbcluj.ro/
@@ -54,10 +55,6 @@ def create_specialization(faculty, link, sem):
     language = None
 
     for child_elem in elem.getchildren():
-        lists_ul = None
-
-        if child_elem.tag == "ul":
-            lists_ul = child_elem
 
         if child_elem.tag == "p" and child_elem.attrib.get('align') == 'justify':
             language_ro = child_elem.getchildren()[5].text
@@ -65,12 +62,12 @@ def create_specialization(faculty, link, sem):
 
         if child_elem.tag == "b":
             language_name = child_elem.text
-            language = Language.objects.create(name=language_name)[0]
+            language = Language.objects.get_or_create(name=language_name)[0]
 
-        if lists_ul:
+        if child_elem.tag == "ul":
             degree = ''
 
-            for elem in lists_ul.getchildren():
+            for elem in child_elem.getchildren():
                 if elem.tag == 'b' and elem.text == 'Orar Licenta':
                     degree = 'BACHELOR'
                 if elem.tag == 'b' and elem.text == 'Orar Masterat':
@@ -78,16 +75,46 @@ def create_specialization(faculty, link, sem):
 
                 if elem.tag == 'a':
                     link_specialization = faculty.link + elem.attrib.get("href")
-                    elem_text = elem.text.split('-')
-                    name = elem_text[0]
+                    name = elem.text[:-9]
                     for prep in PREPOSITIONS:
                         name = name.replace(' ' + prep, '')
                     acronym = "".join(e[0] for e in name.split())
-                    year = int(elem_text[1][-1])
+                    year = int(elem.text[-1])
 
-                    Specialization.objects \
+                    specialization = Specialization.objects \
                         .create(faculty=faculty, name=name, degree=degree, sem=int(sem), language=language,
                                 link=link_specialization, acronym=acronym.upper(), year=year)
+
+                    create_schedule(specialization)
+
+
+def create_schedule(specialization):
+    session = HTMLSession()
+
+    r = session.get(specialization.link)
+    # get element from path from chrome, right click on the element and copy path selector
+    # remove tbody from searching, is not working
+    table_path = r.html.find("#section-to-print > tr > td > table")
+
+    table = lxml.html.fromstring(table_path[0].html)
+    schedule_html = table.getchildren()[0]
+    index_row = 0
+
+    for elem_row in schedule_html.getchildren():
+        index_row += 1
+        index_column = 0
+        if index_row == 1:
+            for elem_column in elem_row.getchildren():
+                if elem_column.tag == 'td':
+                    index_column += 1
+                    if index_column > 2:
+                        span = elem_column.getchildren()[0]
+                        group_name = span.text
+                        for CHR in TEXT_STRING:
+                            group_name = group_name.replace(CHR, '')
+
+                        group = Group.objects.create(name=group_name)
+                        specialization.groups.add(group)
 
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE
