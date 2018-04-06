@@ -105,6 +105,9 @@ class Faculty(models.Model):
     acronym = models.CharField(max_length=128)
     link = models.CharField(max_length=512)
 
+    def __str__(self):
+        return '%s' % (self.name,)
+
 
 class Language(models.Model):
     class Meta:
@@ -113,6 +116,9 @@ class Language(models.Model):
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return '%s' % (self.name,)
 
 
 class Specialization(models.Model):
@@ -138,8 +144,11 @@ class Specialization(models.Model):
     acronym = models.CharField(max_length=128)
     degree = models.CharField(max_length=50, choices=DEGREE, default=BACHELOR)
     with_frequency = models.BooleanField(default=True)
-    year = models.DecimalField(max_digits=1, decimal_places=1)
-    sem = models.DecimalField(max_digits=1, decimal_places=1)
+    year = models.IntegerField()
+    sem = models.IntegerField()
+
+    def __str__(self):
+        return '%s... - year %s - sem %s - %s - %s' % (self.name[:32], self.year, self.sem, self.language, self.degree)
 
 
 class SpecializationGroup(models.Model):
@@ -167,7 +176,7 @@ class Schedule(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
-    specialization_group = models.ForeignKey(SpecializationGroup)
+    specialization_group = models.ForeignKey(SpecializationGroup, null=True)
 
 
 class ScheduleCourseDate(models.Model):

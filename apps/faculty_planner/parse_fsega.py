@@ -1,8 +1,10 @@
+import lxml.html
 from requests_html import HTMLSession
 
 from .models import Faculty, Language, Specialization
 
 FACULTY_ACRONYM = 'FSEGA'
+PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
 
 
 # PAGE0 = https://econ.ubbcluj.ro/
@@ -43,42 +45,49 @@ def create_specialization(faculty, link, sem):
     session = HTMLSession()
 
     r = session.get(link)
-    td = r.html.find("td")
+    # get element from path from chrome, right click on the element and copy path selector
+    # remove tbody from searching, is not working
+    td = r.html.find("body > table > tr:nth-child(1) > td > table > tr:nth-child(2) "
+                     "> td > table > tr > td:nth-child(3) > table:nth-child(2) > tr > td")
 
-    for child_elem in td:
-        language = None
-        lists_ul = []
+    elem = lxml.html.fromstring(td[0].html)
+    language = None
 
-        if child_elem.type == "ul":
+    for child_elem in elem.getchildren():
+        lists_ul = None
+
+        if child_elem.tag == "ul":
             lists_ul = child_elem
 
-        if child_elem.type == "p" and child_elem.proptype == "justify":
-            language_ro = child_elem.child.text
-            language = Language.objects.get_or_create(name=language_ro)
+        if child_elem.tag == "p" and child_elem.attrib.get('align') == 'justify':
+            language_ro = child_elem.getchildren()[5].text
+            language = Language.objects.get_or_create(name=language_ro)[0]
 
-        if child_elem.type == "b":
+        if child_elem.tag == "b":
             language_name = child_elem.text
-            language = Language.objects.get_or_create(name=language_name)
+            language = Language.objects.create(name=language_name)[0]
 
-        degree = ''
-        for childs_ul in lists_ul:
-            for elem in childs_ul:
-                if elem.type == 'b' and elem.text == 'Orar Licenta':
+        if lists_ul:
+            degree = ''
+
+            for elem in lists_ul.getchildren():
+                if elem.tag == 'b' and elem.text == 'Orar Licenta':
                     degree = 'BACHELOR'
-                if elem.type == 'b' and elem.text == 'Orar Masterat':
+                if elem.tag == 'b' and elem.text == 'Orar Masterat':
                     degree = 'MASTER'
 
-                if elem.type == 'a':
-                    link = elem.link
+                if elem.tag == 'a':
+                    link_specialization = faculty.link + elem.attrib.get("href")
                     elem_text = elem.text.split('-')
                     name = elem_text[0]
-                    acronym = filter(str.isupper, name)
+                    for prep in PREPOSITIONS:
+                        name = name.replace(' ' + prep, '')
+                    acronym = "".join(e[0] for e in name.split())
                     year = int(elem_text[1][-1])
 
                     Specialization.objects \
-                        .create(faculty=faculty, language=language, name=name, degree=degree,
-                                link=link, acronym=acronym, year=year, sem=sem)
-
+                        .create(faculty=faculty, name=name, degree=degree, sem=int(sem), language=language,
+                                link=link_specialization, acronym=acronym.upper(), year=year)
 
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE
