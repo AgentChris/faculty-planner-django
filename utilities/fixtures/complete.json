@@ -1,0 +1,1511 @@
+[
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "course"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "coursedate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "faculty"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "language"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "professor"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "room"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "schedule"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "schedulecoursedate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "specialization"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "specializationgroup"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "student"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "studentspecialization"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "faculty_planner",
+    "model": "studentsuggestion"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fb9yg1zh443dv8dclpbnekuft88ij29b",
+  "fields": {
+    "session_data": "ZjhkMTE2YWEwMzk4MTIyYjUxYTQ1NjJjNDNmYjkxNDI3ZjBlYzhmZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlM2U4MTAwMDEzZDYwYTAyNTcxMjEzNDU0ZDQ3M2Y3MzQ0ZGFhMGUxIn0=",
+    "expire_date": "2018-04-20T10:06:49.165Z"
+  }
+},
+{
+  "model": "faculty_planner.faculty",
+  "pk": 1,
+  "fields": {
+    "uuid": "aac3f3ba-5ded-4897-9553-b0d8205bc50d",
+    "name": "Facultatea de Stiinte Economice si Gestiunea Afacerilor",
+    "acronym": "FSEGA",
+    "link": "https://econ.ubbcluj.ro/"
+  }
+},
+{
+  "model": "faculty_planner.language",
+  "pk": 1,
+  "fields": {
+    "uuid": "32f3607f-b161-46a4-a1b1-d751406a2b80",
+    "name": "Linia romana"
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 1,
+  "fields": {
+    "uuid": "e9051ea5-3b14-4f11-8b6e-cdb75f9cca80",
+    "faculty": 1,
+    "language": 1,
+    "name": "Contabilitate Informatica Gestiune ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIG&an=1",
+    "acronym": "CIG",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 2,
+  "fields": {
+    "uuid": "77c699c9-9d82-4a07-bff4-7dc7a5e71c4d",
+    "faculty": 1,
+    "language": 1,
+    "name": "Contabilitate Informatica Gestiune ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIG&an=2",
+    "acronym": "CIG",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 3,
+  "fields": {
+    "uuid": "6dec3ccb-6f26-40e3-8ee5-76e75b4a96b6",
+    "faculty": 1,
+    "language": 1,
+    "name": "Contabilitate Informatica Gestiune ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIG&an=3",
+    "acronym": "CIG",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 4,
+  "fields": {
+    "uuid": "ca20c68a-f9e9-49d9-8df7-254759205777",
+    "faculty": 1,
+    "language": 1,
+    "name": "Contabilitate informatica gestiune (la Sighet) ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIGSgt&an=1",
+    "acronym": "CIG(S",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 5,
+  "fields": {
+    "uuid": "6295248e-9181-489e-a449-9ac8d66e6c78",
+    "faculty": 1,
+    "language": 1,
+    "name": "Contabilitate informatica gestiune (la Sighet) ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIGSgt&an=2",
+    "acronym": "CIG(S",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 6,
+  "fields": {
+    "uuid": "be901519-b67c-45c2-ba26-34842dae1e34",
+    "faculty": 1,
+    "language": 1,
+    "name": "Contabilitate informatica gestiune (la Sighet) ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIGSgt&an=3",
+    "acronym": "CIG(S",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 7,
+  "fields": {
+    "uuid": "af910211-a732-4f7b-bff5-930e4b35d520",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economia Comertului, Turismului Serviciilor ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=ECTS&an=1",
+    "acronym": "ECTS",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 8,
+  "fields": {
+    "uuid": "3047eb2b-6427-49e9-86a2-10b4890ed580",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economia Comertului, Turismului Serviciilor ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=ECTS&an=2",
+    "acronym": "ECTS",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 9,
+  "fields": {
+    "uuid": "47ef899c-58b3-4647-89d0-b22c0bebe59b",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economia Comertului, Turismului Serviciilor ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=ECTS&an=3",
+    "acronym": "ECTS",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 10,
+  "fields": {
+    "uuid": "1a6a82a5-4beb-47df-a1ad-397b74aacb47",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Agroalimentara Mediului ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=1",
+    "acronym": "EAM",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 11,
+  "fields": {
+    "uuid": "89364538-6ddb-46ca-9a52-c6004bfae24b",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Agroalimentara Mediului ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2",
+    "acronym": "EAM",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 12,
+  "fields": {
+    "uuid": "6ad78aa8-19bd-4132-8b74-b17900146140",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Agroalimentara Mediului ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=3",
+    "acronym": "EAM",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 13,
+  "fields": {
+    "uuid": "33781e7a-e234-4175-a211-2134eb3b2336",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Generala ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EG&an=1",
+    "acronym": "EG",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 14,
+  "fields": {
+    "uuid": "96ee3526-779e-4d43-b43f-2629024dabd4",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Generala ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EG&an=2",
+    "acronym": "EG",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 15,
+  "fields": {
+    "uuid": "767c49bb-16c8-4e83-b4be-14ad5a360265",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Generala ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EG&an=3",
+    "acronym": "EG",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 16,
+  "fields": {
+    "uuid": "8270541d-38c0-4345-a065-dd52eb9de12d",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Afaceri Internationale ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAI&an=1",
+    "acronym": "EAI",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 17,
+  "fields": {
+    "uuid": "8086fe88-1ea4-4490-a959-e51fccb0c3a4",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Afaceri Internationale ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAI&an=2",
+    "acronym": "EAI",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 18,
+  "fields": {
+    "uuid": "a01104e4-d715-49a6-a2bb-93c6975eec6e",
+    "faculty": 1,
+    "language": 1,
+    "name": "Economie Afaceri Internationale ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAI&an=3",
+    "acronym": "EAI",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 19,
+  "fields": {
+    "uuid": "d528c663-03f5-41ad-abc5-e35481a514c2",
+    "faculty": 1,
+    "language": 1,
+    "name": "Finante banci ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=FB&an=1",
+    "acronym": "FB",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 20,
+  "fields": {
+    "uuid": "383ec69e-f308-4739-be64-8bbccaf0def1",
+    "faculty": 1,
+    "language": 1,
+    "name": "Finante banci ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=FB&an=2",
+    "acronym": "FB",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 21,
+  "fields": {
+    "uuid": "3407440c-f05a-4a76-9e40-ec65687da051",
+    "faculty": 1,
+    "language": 1,
+    "name": "Finante banci ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=FB&an=3",
+    "acronym": "FB",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 22,
+  "fields": {
+    "uuid": "3ecc4bee-959d-4ce3-8e21-a5747a216c7c",
+    "faculty": 1,
+    "language": 1,
+    "name": "Informatica Economica ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=IE&an=1",
+    "acronym": "IE",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 23,
+  "fields": {
+    "uuid": "fbd80b45-ade0-461e-bf50-abb089fc9b8a",
+    "faculty": 1,
+    "language": 1,
+    "name": "Informatica Economica ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=IE&an=2",
+    "acronym": "IE",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 24,
+  "fields": {
+    "uuid": "7fb0bb12-b95f-4eed-85ea-87c5a99525e7",
+    "faculty": 1,
+    "language": 1,
+    "name": "Informatica Economica ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=IE&an=3",
+    "acronym": "IE",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 25,
+  "fields": {
+    "uuid": "f497b124-32f0-43d5-989d-de54672a69e1",
+    "faculty": 1,
+    "language": 1,
+    "name": "Management ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MG&an=1",
+    "acronym": "M",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 26,
+  "fields": {
+    "uuid": "60c58437-783c-45f4-833f-a72240473ad2",
+    "faculty": 1,
+    "language": 1,
+    "name": "Management ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MG&an=2",
+    "acronym": "M",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 27,
+  "fields": {
+    "uuid": "533e5c30-7006-44dd-8605-342ce2a58e33",
+    "faculty": 1,
+    "language": 1,
+    "name": "Management ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MG&an=3",
+    "acronym": "M",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 28,
+  "fields": {
+    "uuid": "896f0c5a-ae11-4a56-8e65-1f1751ad3a48",
+    "faculty": 1,
+    "language": 1,
+    "name": "Marketing ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MK&an=1",
+    "acronym": "M",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 29,
+  "fields": {
+    "uuid": "6b054d1f-32b6-4b1c-af0d-b7cf7f457123",
+    "faculty": 1,
+    "language": 1,
+    "name": "Marketing ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MK&an=2",
+    "acronym": "M",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 30,
+  "fields": {
+    "uuid": "0205a07b-b4bc-4ea1-b898-d7931d43aa99",
+    "faculty": 1,
+    "language": 1,
+    "name": "Marketing ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MK&an=3",
+    "acronym": "M",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 31,
+  "fields": {
+    "uuid": "d148fd75-bf78-4b49-8bab-c08fb19c7a24",
+    "faculty": 1,
+    "language": 1,
+    "name": "Statistica Previziune Economica ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=SPE&an=1",
+    "acronym": "SPE",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 32,
+  "fields": {
+    "uuid": "69f7649c-029d-40fc-9f65-cb1e40f8f18d",
+    "faculty": 1,
+    "language": 1,
+    "name": "Statistica Previziune Economica ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=SPE&an=2",
+    "acronym": "SPE",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 33,
+  "fields": {
+    "uuid": "dcef2ceb-24da-4497-90c1-ef247cac9793",
+    "faculty": 1,
+    "language": 1,
+    "name": "Statistica Previziune Economica ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=SPE&an=3",
+    "acronym": "SPE",
+    "degree": "BACHELOR",
+    "with_frequency": true,
+    "year": 3,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 34,
+  "fields": {
+    "uuid": "4be40bbc-f2f7-43c6-97fb-b8c64f97b900",
+    "faculty": 1,
+    "language": 1,
+    "name": "Administrareafacerilor in turism, comert servicii ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AATCS&an=1",
+    "acronym": "AITCS",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 35,
+  "fields": {
+    "uuid": "dd246498-50c5-4925-aed0-286a1755ef17",
+    "faculty": 1,
+    "language": 1,
+    "name": "Administrareafacerilor in turism, comert servicii ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AATCS&an=2",
+    "acronym": "AITCS",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 36,
+  "fields": {
+    "uuid": "67145acc-99e4-45d6-846e-ed3b61738dad",
+    "faculty": 1,
+    "language": 1,
+    "name": "Afaceri internationale ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AI&an=1",
+    "acronym": "AI",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 37,
+  "fields": {
+    "uuid": "5b102c41-6180-45b4-a22e-c1c34889ba51",
+    "faculty": 1,
+    "language": 1,
+    "name": "Afaceri internationale ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AI&an=2",
+    "acronym": "AI",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 38,
+  "fields": {
+    "uuid": "bb56c972-fe24-4cce-ba3e-eae1ec0702a7",
+    "faculty": 1,
+    "language": 1,
+    "name": "Agrobusiness ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AB&an=1",
+    "acronym": "A",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 39,
+  "fields": {
+    "uuid": "1fa75677-c087-4d3e-acd4-e87127be49bc",
+    "faculty": 1,
+    "language": 1,
+    "name": "Agrobusiness ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AB&an=2",
+    "acronym": "A",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 40,
+  "fields": {
+    "uuid": "b4010d32-20ee-48fe-a01c-9684dd47e57b",
+    "faculty": 1,
+    "language": 1,
+    "name": "Auditul managementul financiarl fondurilor europene ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AMFFE&an=1",
+    "acronym": "AMFFE",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 41,
+  "fields": {
+    "uuid": "d48c7239-df10-4b2c-a56e-9ce997fbe49a",
+    "faculty": 1,
+    "language": 1,
+    "name": "Auditul managementul financiarl fondurilor europene ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AMFFE&an=2",
+    "acronym": "AMFFE",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 42,
+  "fields": {
+    "uuid": "0206373c-c468-420c-85e1-4c71e940f488",
+    "faculty": 1,
+    "language": 1,
+    "name": "Banci piete capital  ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=BPC&an=1",
+    "acronym": "BPC",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 43,
+  "fields": {
+    "uuid": "99711d63-0ced-4d09-8e09-279ee5407eaa",
+    "faculty": 1,
+    "language": 1,
+    "name": "Banci piete capital  ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=BPC&an=2",
+    "acronym": "BPC",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 44,
+  "fields": {
+    "uuid": "8243db58-ade8-42e4-898d-727fd39838d4",
+    "faculty": 1,
+    "language": 1,
+    "name": "Dezvoltare regionala durabila ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=DRD&an=1",
+    "acronym": "DRD",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 45,
+  "fields": {
+    "uuid": "bcc89751-c16d-4886-883f-1994e933ef78",
+    "faculty": 1,
+    "language": 1,
+    "name": "Dezvoltare regionala durabila ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=DRD&an=2",
+    "acronym": "DRD",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 46,
+  "fields": {
+    "uuid": "2eadf148-86b1-4e69-8203-911543abb29c",
+    "faculty": 1,
+    "language": 1,
+    "name": "Diagnostic evaluare ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=DE&an=1",
+    "acronym": "DE",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 1,
+    "sem": 2
+  }
+},
+{
+  "model": "faculty_planner.specialization",
+  "pk": 47,
+  "fields": {
+    "uuid": "623eec72-d488-4cd5-bdb6-fb3739eb7e67",
+    "faculty": 1,
+    "language": 1,
+    "name": "Diagnostic evaluare ",
+    "link": "https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=DE&an=2",
+    "acronym": "DE",
+    "degree": "MASTER",
+    "with_frequency": true,
+    "year": 2,
+    "sem": 2
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can add Course",
+    "content_type": 7,
+    "codename": "add_course"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can change Course",
+    "content_type": 7,
+    "codename": "change_course"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can delete Course",
+    "content_type": 7,
+    "codename": "delete_course"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can add Course Date",
+    "content_type": 8,
+    "codename": "add_coursedate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can change Course Date",
+    "content_type": 8,
+    "codename": "change_coursedate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can delete Course Date",
+    "content_type": 8,
+    "codename": "delete_coursedate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add Faculty",
+    "content_type": 9,
+    "codename": "add_faculty"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change Faculty",
+    "content_type": 9,
+    "codename": "change_faculty"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete Faculty",
+    "content_type": 9,
+    "codename": "delete_faculty"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can add Group",
+    "content_type": 10,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can change Group",
+    "content_type": 10,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can delete Group",
+    "content_type": 10,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can add Language",
+    "content_type": 11,
+    "codename": "add_language"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can change Language",
+    "content_type": 11,
+    "codename": "change_language"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can delete Language",
+    "content_type": 11,
+    "codename": "delete_language"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can add Professor",
+    "content_type": 12,
+    "codename": "add_professor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can change Professor",
+    "content_type": 12,
+    "codename": "change_professor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can delete Professor",
+    "content_type": 12,
+    "codename": "delete_professor"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add Room",
+    "content_type": 13,
+    "codename": "add_room"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change Room",
+    "content_type": 13,
+    "codename": "change_room"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete Room",
+    "content_type": 13,
+    "codename": "delete_room"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can add Schedule",
+    "content_type": 14,
+    "codename": "add_schedule"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can change Schedule",
+    "content_type": 14,
+    "codename": "change_schedule"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can delete Schedule",
+    "content_type": 14,
+    "codename": "delete_schedule"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can add schedule course date",
+    "content_type": 15,
+    "codename": "add_schedulecoursedate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can change schedule course date",
+    "content_type": 15,
+    "codename": "change_schedulecoursedate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can delete schedule course date",
+    "content_type": 15,
+    "codename": "delete_schedulecoursedate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can add Specialization",
+    "content_type": 16,
+    "codename": "add_specialization"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can change Specialization",
+    "content_type": 16,
+    "codename": "change_specialization"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can delete Specialization",
+    "content_type": 16,
+    "codename": "delete_specialization"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add specialization group",
+    "content_type": 17,
+    "codename": "add_specializationgroup"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change specialization group",
+    "content_type": 17,
+    "codename": "change_specializationgroup"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete specialization group",
+    "content_type": 17,
+    "codename": "delete_specializationgroup"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can add Student",
+    "content_type": 18,
+    "codename": "add_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can change Student",
+    "content_type": 18,
+    "codename": "change_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can delete Student",
+    "content_type": 18,
+    "codename": "delete_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can add Student Specialization",
+    "content_type": 19,
+    "codename": "add_studentspecialization"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can change Student Specialization",
+    "content_type": 19,
+    "codename": "change_studentspecialization"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can delete Student Specialization",
+    "content_type": 19,
+    "codename": "delete_studentspecialization"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can add Student Suggestion",
+    "content_type": 20,
+    "codename": "add_studentsuggestion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can change Student Suggestion",
+    "content_type": 20,
+    "codename": "change_studentsuggestion"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can delete Student Suggestion",
+    "content_type": 20,
+    "codename": "delete_studentsuggestion"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$jL0CRmNx4U7W$f+LLiLqmTXcSOSei9k+6jR+MOJW2nzPNfaW9chribtw=",
+    "last_login": "2018-04-06T10:06:49.161Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-04-06T10:06:16.336Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2018-04-06T10:07:42.555Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "Facultatea de Stiinte Economice si Gestiunea Afacerilor",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+}
+]
