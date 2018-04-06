@@ -148,7 +148,9 @@ class Specialization(models.Model):
     sem = models.IntegerField()
 
     def __str__(self):
-        return '%s... - year %s - sem %s - %s - %s' % (self.name[:32], self.year, self.sem, self.language, self.degree)
+        return '%s... - year %s - sem %s - %s - %s - %s' \
+               % (self.name[:32], self.year, self.sem, self.language,
+                  self.degree, self.faculty.acronym)
 
 
 class SpecializationGroup(models.Model):
