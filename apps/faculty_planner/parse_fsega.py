@@ -1,11 +1,15 @@
+from datetime import datetime
+
 import lxml.html
 from requests_html import HTMLSession
 
-from .models import Faculty, Language, Specialization, Group
+from .models import Faculty, Language, Specialization, Group, Room, \
+    Professor, CourseDate, Course, DAY_IN_WEEK, Schedule, PARITY
 
 FACULTY_ACRONYM = 'FSEGA'
 PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
 TEXT_STRING = ['\t', '\n', '\r']
+FSEGA_URL_LOCATION = 'https://www.google.ro/maps/place/Faculty+of+Economics+and+Business+Administration/@46.773181,23.620944,15z/data=!4m2!3m1!1s0x0:0xcc357d4dedcf12a0?sa=X&ved=0ahUKEwiQjKWpuqbaAhUEmrQKHQNFBTIQ_BIInwEwCg'
 
 
 # PAGE0 = https://econ.ubbcluj.ro/
@@ -89,6 +93,10 @@ def create_specialization(faculty, link, sem):
 
 
 def create_schedule(specialization):
+    schedule = Schedule.objects.create(specialization=specialization)
+    semi_groups_one = []
+    semi_groups_two = []
+
     session = HTMLSession()
 
     r = session.get(specialization.link)
@@ -113,8 +121,76 @@ def create_schedule(specialization):
                         for CHR in TEXT_STRING:
                             group_name = group_name.replace(CHR, '')
 
-                        group = Group.objects.create(name=group_name)
-                        specialization.groups.add(group)
+                        group_one = Group.objects.create(name=group_name, sub_group=1)
+                        group_two = Group.objects.create(name=group_name, sub_group=2)
+
+                        specialization.groups.add(group_one)
+                        specialization.groups.add(group_two)
+
+                        semi_groups_one.append(group_one)
+                        semi_groups_two.append(group_two)
+
+        if index_row > 2:
+            current_day_in_week = DAY_IN_WEEK[index_row - 1]
+
+            group_lower_limit = 1
+            start_hour = ''
+            end_hour = ''
+            for elem_column in elem_row.getchildren():
+                index_column += 1
+                if elem_column.tag == "td" and index_column == 1:
+                    hour = elem_column.text.split('-')
+                    start_hour = datetime.strftime(hour[0], "%H:%M")
+                    end_hour = datetime.strftime(hour[1], "%H:%M")
+                if elem_column.tag == "td" and index_column > 1:
+                    group_upper_limit = elem_column.attrib.get("colspan", 1)
+                    span_content = elem_column.getchildren()
+
+                    span_content_children = span_content.getchildren()
+
+                    room_name = span_content_children[0]
+                    room = Room.objects.get_or_create(name=room_name, location=FSEGA_URL_LOCATION)
+
+                    course_name = span_content_children[1].text
+                    course = Course.objects.get_or_create(name=course_name)
+
+                    professor_elem = span_content_children[2].getchildren()
+                    professor_link = professor_elem.attrib.get("href", "")
+                    professor_name = professor_elem.text
+                    professor = Professor.objects.get_or_create(name=professor_name, link=professor_link)
+
+                    week_type = span_content[3].getchildren()
+                    parity_week = PARITY[2]
+                    is_sem_group_1 = True
+                    is_sem_group_2 = True
+
+                    if week_type.text == "SI":
+                        parity_week = PARITY[0]
+                    if week_type.text == "SP":
+                        parity_week = PARITY[1]
+
+                    if week_type == "Sg1":
+                        is_sem_group_2 = False
+                    if week_type == "Sg2":
+                        is_sem_group_1 = False
+
+                    course_date = CourseDate.objects \
+                        .create(course=course, room=room, professor=professor,
+                                start_hour=start_hour, end_hour=end_hour,
+                                day_in_week=current_day_in_week, parity_week=parity_week)
+
+                    schedule.course_dates.add(course_date)
+
+                    for i in range(group_lower_limit, group_upper_limit):
+                        semi_group_one = semi_groups_one[i]
+                        semi_group_two = semi_groups_two[i]
+
+                        if is_sem_group_1:
+                            course_date.groups.add(semi_group_one)
+                        if is_sem_group_2:
+                            course_date.groups.add(semi_group_two)
+
+                group_upper_limit = group_lower_limit
 
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE

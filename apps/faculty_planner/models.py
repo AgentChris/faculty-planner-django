@@ -13,7 +13,6 @@ class Course(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.TextField(max_length=256)
     description = models.TextField(max_length=512)
-    location = models.TextField(max_length=512)
     updated = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -27,8 +26,9 @@ class Professor(models.Model):
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.TextField(max_length=256)
-    email = models.CharField(max_length=128)
-    updated = models.DateField(default=timezone.now)
+    link = models.TextField(max_length=256, default="")
+    email = models.CharField(max_length=128, null=True, default="")
+    updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return '%s ...' % (self.name[:32],)
@@ -50,35 +50,37 @@ class Group(models.Model):
         verbose_name_plural = _('Groups')
 
     name = models.CharField(max_length=128)
-    sub_group = models.DecimalField(max_digits=1, decimal_places=1)
+    sub_group = models.IntegerField()
+
+
+MONDAY = 'MON'
+TUESDAY = 'TUES'
+WEDNESDAY = 'WED'
+THURSDAY = 'THURS'
+FRIDAY = 'FRI'
+SATURDAY = 'SAT'
+SUNDAY = 'SUN'
+DAY_IN_WEEK = (
+    (MONDAY, 'MONDAY'),
+    (TUESDAY, 'TUESDAY'),
+    (WEDNESDAY, 'WEDNESDAY'),
+    (THURSDAY, 'THURSDAY'),
+    (FRIDAY, 'FRIDAY'),
+    (SATURDAY, 'SATURDAY'),
+    (SUNDAY, 'SUNDAY'),
+)
+
+ODD = 'O'
+EVEN = 'E'
+EVERY_WEEK = 'W'
+PARITY = (
+    (ODD, 'OOD'),
+    (EVEN, 'EVEN'),
+    (EVERY_WEEK, 'EVERY_WEEK'),
+)
 
 
 class CourseDate(models.Model):
-    MONDAY = 'MON'
-    TUESDAY = 'TUES'
-    WEDNESDAY = 'WED'
-    THURSDAY = 'THURS'
-    FRIDAY = 'FRI'
-    SATURDAY = 'SAT'
-    SUNDAY = 'SUN'
-    DAY_IN_WEEK = (
-        (MONDAY, 'MONDAY'),
-        (TUESDAY, 'TUESDAY'),
-        (WEDNESDAY, 'WEDNESDAY'),
-        (THURSDAY, 'THURSDAY'),
-        (FRIDAY, 'FRIDAY'),
-        (SATURDAY, 'SATURDAY'),
-        (SUNDAY, 'SUNDAY'),
-    )
-    ODD = 'O'
-    EVEN = 'E'
-    EVERY_WEEK = 'W'
-    PARITY = (
-        (ODD, 'OOD'),
-        (EVEN, 'EVEN'),
-        (EVERY_WEEK, 'EVERY_WEEK'),
-    )
-
     class Meta:
         verbose_name = _('Course Date')
         verbose_name_plural = _('Course Dates')
@@ -87,12 +89,21 @@ class CourseDate(models.Model):
     course = models.ForeignKey(Course)
     parity_week = models.CharField(max_length=1, choices=PARITY, default=EVERY_WEEK)
     room = models.ForeignKey(Room)
-    group = models.ForeignKey(Group)
+    groups = models.ManyToManyField(Group, through='CourseDateGroup')
     professor = models.ForeignKey(Professor)
     day_in_week = models.CharField(max_length=5, choices=DAY_IN_WEEK, default=None)
-    start_hour = models.TimeField(default=timezone.now)
-    end_hour = models.TimeField(default=timezone.now)
+    start_hour = models.DateTimeField(default=timezone.now)
+    end_hour = models.DateTimeField(default=timezone.now)
     updated = models.DateField(default=timezone.now)
+
+
+class CourseDateGroup(models.Model):
+    class Meta:
+        verbose_name = _('Course Date')
+        verbose_name_plural = _('Course Dates')
+
+    course_date = models.ForeignKey(CourseDate)
+    group = models.ForeignKey(Group)
 
 
 class Faculty(models.Model):
@@ -178,7 +189,8 @@ class Schedule(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
-    specialization_group = models.ForeignKey(SpecializationGroup, null=True)
+    specialization = models.ForeignKey(Specialization, null=True)
+    course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')
 
 
 class ScheduleCourseDate(models.Model):
