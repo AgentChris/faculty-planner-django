@@ -42,6 +42,9 @@ class Room(models.Model):
     name = models.CharField(max_length=128)
     location = models.TextField(max_length=512)  # google maps url
 
+    def __str__(self):
+        return self.name
+
 
 class Group(models.Model):
     class Meta:
@@ -94,6 +97,11 @@ class CourseDate(models.Model):
     start_hour = models.DateTimeField(auto_now_add=True, blank=True)
     end_hour = models.DateTimeField(auto_now_add=True, blank=True)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return '%s... - room %s - prof. %s %s %s:%s - %s:%s' \
+               % (self.course.name[:32], self.room.name, self.professor.name, self.day_in_week,
+                  self.start_hour.hour, self.start_hour.minute, self.end_hour.hour, self.end_hour.minute)
 
 
 class CourseDateGroup(models.Model):
