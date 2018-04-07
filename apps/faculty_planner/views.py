@@ -14,7 +14,7 @@ from .services import store_specialization
 # from myngs.models import MyDashboardUserProfile
 
 
-def index(request):
+def scrape_faculty(request):
     get_specialization_website_url()
     return JsonResponse({}, safe=False)
 

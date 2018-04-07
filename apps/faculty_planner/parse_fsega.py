@@ -159,7 +159,7 @@ def create_schedule(specialization):
                     professor_name = professor_elem.text
                     professor = Professor.objects.get_or_create(name=professor_name, link=professor_link)
 
-                    week_type = span_content[3].getchildren()
+                    week_type = span_content[4].getchildren()
                     parity_week = PARITY[2]
                     is_sem_group_1 = True
                     is_sem_group_2 = True
