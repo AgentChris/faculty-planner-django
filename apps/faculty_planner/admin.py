@@ -1,7 +1,11 @@
 from django.contrib import admin
 
 from .models import Faculty, Specialization, Language, \
-    CourseDate, Schedule
+    CourseDate, Schedule, Professor
+
+
+class ProfessorAdmin(admin.ModelAdmin):
+    model = Professor
 
 
 class FacultyAdmin(admin.ModelAdmin):
@@ -34,6 +38,7 @@ class CourseDateAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Faculty, FacultyAdmin)
+admin.site.register(Professor, ProfessorAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Schedule, ScheduleAdminForm)
 admin.site.register(Specialization, SpecializationAdmin)

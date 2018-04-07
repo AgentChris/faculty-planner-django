@@ -30,7 +30,7 @@ class Professor(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return '%s ...' % (self.name[:32],)
+        return '%s' % (self.name,)
 
 
 class Room(models.Model):
