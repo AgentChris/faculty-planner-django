@@ -240,6 +240,12 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour, curren
             if week_type == "SP":
                 parity_week = PARITY[1][0]
 
+            # TODO add to semigroup
+            # TODO add groups
+            # TODO add course optional
+            # TODO add course type uppercase - Course, lowercase - Semniar
+            # TODO add course reading from semigroup
+
             if week_type == "Sg1":
                 is_sem_group_2 = False
             if week_type == "Sg2":
