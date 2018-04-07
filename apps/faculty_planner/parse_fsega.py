@@ -210,7 +210,7 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour, curren
 
         span_child = span_elem.getchildren()
 
-        if len(span_child) > 0:
+        if len(span_child) > 0:  # TODO: explore more
             if span_child[0].tag == "span":
                 span_child = span_child[0].getchildren()
                 if span_child[0].tag != "font":
