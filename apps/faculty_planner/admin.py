@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Faculty, Specialization, Language, CourseDate
+from .models import Faculty, Specialization, Language, \
+    CourseDate, Schedule
 
 
 class FacultyAdmin(admin.ModelAdmin):
@@ -9,6 +10,18 @@ class FacultyAdmin(admin.ModelAdmin):
 
 class LanguageAdmin(admin.ModelAdmin):
     model = Language
+
+
+class CourseDateInline(admin.TabularInline):
+    model = CourseDate
+
+
+class ScheduleCourseDatesInline(admin.TabularInline):
+    model = Schedule.course_dates.through
+
+
+class ScheduleAdminForm(admin.ModelAdmin):
+    inlines = [ScheduleCourseDatesInline, ]
 
 
 class SpecializationAdmin(admin.ModelAdmin):
@@ -22,5 +35,6 @@ class CourseDateAdmin(admin.ModelAdmin):
 
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Language, LanguageAdmin)
+admin.site.register(Schedule, ScheduleAdminForm)
 admin.site.register(Specialization, SpecializationAdmin)
 admin.site.register(CourseDate, CourseDateAdmin)
