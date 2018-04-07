@@ -102,134 +102,155 @@ def create_schedule(specialization):
     session = HTMLSession()
 
     r = session.get(specialization.link)
+    # r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2')
+
     # get element from path from chrome, right click on the element and copy path selector
     # remove tbody from searching, is not working
-    table_path = r.html.find("#section-to-print > tr > td > table")
+    r.html.encoding = r.encoding
+    try:
+        table_path = r.html.find("#section-to-print > tr > td > table")
 
-    table = lxml.html.fromstring(table_path[0].html)
-    schedule_html = table.getchildren()[0]
-    index_row = 1
-    current_index_day = 0
+        table = lxml.html.fromstring(table_path[0].html)
+        schedule_html = table.getchildren()[0]
+        index_row = 1
+        current_index_day = 0
+        current_day_in_week = None
 
-    for elem_row in schedule_html.getchildren():
-        index_row += 1
-        index_column = 0
-        if index_row == 1:
-            for elem_column in elem_row.getchildren():
-                if elem_column.tag == 'td':
-                    index_column += 1
-                    if index_column > 2:
-                        span = elem_column.getchildren()[0]
-                        group_name = span.text
+        for elem_row in schedule_html.getchildren():
+            index_row += 1
+            index_column = 0
+            if index_row == 1:
+                for elem_column in elem_row.getchildren():
+                    if elem_column.tag == 'td':
+                        index_column += 1
+                        if index_column > 2:
+                            span = elem_column.getchildren()[0]
+                            group_name = span.text
+                            for CHR in TEXT_STRING:
+                                group_name = group_name.replace(CHR, '')
+
+                            group_one = Group.objects.create(name=group_name, sub_group=1)
+                            group_two = Group.objects.create(name=group_name, sub_group=2)
+
+                            SpecializationGroup.objects \
+                                .create(specialization=specialization, group=group_one)
+                            SpecializationGroup.objects \
+                                .create(specialization=specialization, group=group_one)
+
+                            semi_groups_one.append(group_one)
+                            semi_groups_two.append(group_two)
+
+            if index_row > 2:
+
+                group_lower_limit = 0
+                start_hour = ''
+                end_hour = ''
+                elem_row_children = elem_row.getchildren()
+
+                if len(elem_row_children) and elem_row_children[0].attrib.get('rowspan', 0) != 0:
+                    elem_row_children.pop(0)
+                    current_day_in_week = DAY_IN_WEEK[current_index_day][0]
+                if len(elem_row_children) == 1:
+                    elem_row_children.pop(0)
+
+                for elem_column in elem_row_children:
+                    if elem_column.tag == "td":
+                        index_column += 1
+                    if elem_column.tag == "td" and index_column == 1:
+                        hour = elem_column.getchildren()[0].text.split('-')
+                        start_hour_text = hour[0]
                         for CHR in TEXT_STRING:
-                            group_name = group_name.replace(CHR, '')
+                            start_hour_text = start_hour_text.replace(CHR, '')
+                        start_hour = datetime.strptime(start_hour_text, "%H:%M")
+                        end_hour = datetime.strptime(hour[1], "%H:%M")
+                    if elem_column.tag == "td" and index_column > 1:
+                        # group_upper_limit = elem_column.attrib.get("colspan", 1)
+                        elem_column = remove_comments(elem_column.getchildren())
 
-                        group_one = Group.objects.create(name=group_name, sub_group=1)
-                        group_two = Group.objects.create(name=group_name, sub_group=2)
-
-                        SpecializationGroup.objects \
-                            .create(specialization=specialization, group=group_one)
-                        SpecializationGroup.objects \
-                            .create(specialization=specialization, group=group_one)
-
-                        semi_groups_one.append(group_one)
-                        semi_groups_two.append(group_two)
-
-        if index_row > 2:
-
-            group_lower_limit = 0
-            start_hour = ''
-            end_hour = ''
-            elem_row_children = elem_row.getchildren()
-
-            if len(elem_row_children) and elem_row_children[0].attrib.get('rowspan', 0) != 0:
-                elem_row_children.pop(0)
-                current_day_in_week = DAY_IN_WEEK[current_index_day][0]
-            if len(elem_row_children) == 1:
-                elem_row_children.pop(0)
-
-            for elem_column in elem_row_children:
-                if elem_column.tag == "td":
-                    index_column += 1
-                if elem_column.tag == "td" and index_column == 1:
-                    hour = elem_column.getchildren()[0].text.split('-')
-                    start_hour_text = hour[0]
-                    for CHR in TEXT_STRING:
-                        start_hour_text = start_hour_text.replace(CHR, '')
-                    start_hour = datetime.strptime(start_hour_text, "%H:%M")
-                    end_hour = datetime.strptime(hour[1], "%H:%M")
-                if elem_column.tag == "td" and index_column > 1:
-                    group_upper_limit = elem_column.attrib.get("colspan", 1)
-                    for html_children in elem_column.getchildren():
-                        if html_children.text == "Pauza":
-                            current_index_day = 0
-                        if not isinstance(html_children, HtmlComment) and html_children.text != "Pauza":
-                            div_content_children = html_children.getchildren()
-                            # span_list_content_children = div_content_children[0].getchildren()[0].getchildren()
-                            span_list_content_children = div_content_children[0].getchildren() # here is the problem
-                            ok = 0
-                            if span_list_content_children[0].tag == 'span':
-                                span_list_content_children = span_list_content_children[0].getchildren()
+                        if len(elem_column) > 0:
+                            if elem_column[0].tag == "font":  # is a break (Pauza)
+                                current_index_day += 1
                             else:
-                                ok = 1
-                                print(span_list_content_children)
+                                course_date = get_data_from_cell(
+                                    elem_column=elem_column, specialization=specialization,
+                                    start_hour=start_hour, end_hour=end_hour,
+                                    current_day_in_week=current_day_in_week)
+                                if course_date:
+                                    ScheduleCourseDate.objects \
+                                        .create(schedule=schedule, course_date=course_date)
+    except UnicodeDecodeError:
+        print("Error in request html for %s with the link: %s" % (specialization.name, specialization.link))
+        # for i in range(group_lower_limit, group_upper_limit):
+        #     semi_group_one = semi_groups_one[i]
+        #     semi_group_two = semi_groups_two[i]
+        #
+        #     if is_sem_group_1:
+        #         CourseDateGroup.objects \
+        #             .create(course_date=course_date, group=semi_group_one)
+        #     if is_sem_group_2:
+        #         CourseDateGroup.objects \
+        #             .create(course_date=course_date, group=semi_group_two)
+        #
+        # group_lower_limit = group_upper_limit
 
-                            if len(span_list_content_children) > 0:
-                                span_content_children = span_list_content_children[0]
-                                if ok == 0:
-                                    room_name = span_content_children.getchildren()[0].text
-                                else:
-                                    room_name = span_content_children.text
-                                room = Room.objects.get_or_create(name=room_name, location=FSEGA_URL_LOCATION)[0]
 
-                                if ok == 0:
-                                    course_name = span_content_children.getchildren()[0].tail
-                                else:
-                                    course_name = span_content_children.tail
+def remove_comments(html_elements):
+    new_elems = []
+    for html_element in html_elements:
+        if not isinstance(html_element, HtmlComment):
+            new_elems.append(html_element)
+    return new_elems
 
-                                course = Course.objects.get_or_create(name=course_name)[0]
 
-                                professor_elem = span_content_children[1]
-                                professor_link = specialization.faculty.link + professor_elem.attrib.get("href", "")
-                                professor_name = professor_elem.text
-                                professor = Professor.objects.get_or_create(name=professor_name, link=professor_link)[0]
+def get_data_from_cell(elem_column, specialization, start_hour, end_hour, current_day_in_week):
+    course_date = None
 
-                                week_type = span_content_children[2].text
-                                parity_week = PARITY[2][0]
-                                is_sem_group_1 = True
-                                is_sem_group_2 = True
+    for div_elem in elem_column:
+        span_elem = div_elem.getchildren()[0]
 
-                                if week_type == "SI":
-                                    parity_week = PARITY[0][0]
-                                if week_type == "SP":
-                                    parity_week = PARITY[1][0]
+        span_child = span_elem.getchildren()
 
-                                if week_type == "Sg1":
-                                    is_sem_group_2 = False
-                                if week_type == "Sg2":
-                                    is_sem_group_1 = False
+        if len(span_child) > 0:
+            if span_child[0].tag == "span":
+                span_child = span_child[0].getchildren()
+                if span_child[0].tag != "font":
+                    span_child = span_child[0].getchildren()
+            # take data from font tag
+            room_name = span_child[0].text
+            room = Room.objects.get_or_create(name=room_name, location=FSEGA_URL_LOCATION)[0]
 
-                                course_date = CourseDate.objects \
-                                    .create(course=course, room=room, professor=professor,
-                                            start_hour=start_hour, end_hour=end_hour,
-                                            day_in_week=current_day_in_week, parity_week=parity_week)
+            course_name = span_child[0].tail
+            course = Course.objects.get_or_create(name=course_name)[0]
 
-                                ScheduleCourseDate.objects \
-                                    .create(schedule=schedule, course_date=course_date)
+            professor_elem = span_child[1]
+            professor_link = specialization.faculty.link + professor_elem.attrib.get("href", "")
+            professor_name = professor_elem.text
+            professor = Professor.objects.get_or_create(name=professor_name, link=professor_link)[0]
 
-                                # for i in range(group_lower_limit, group_upper_limit):
-                                #     semi_group_one = semi_groups_one[i]
-                                #     semi_group_two = semi_groups_two[i]
-                                #
-                                #     if is_sem_group_1:
-                                #         CourseDateGroup.objects \
-                                #             .create(course_date=course_date, group=semi_group_one)
-                                #     if is_sem_group_2:
-                                #         CourseDateGroup.objects \
-                                #             .create(course_date=course_date, group=semi_group_two)
-                                #
-                                # group_lower_limit = group_upper_limit
+            week_type = ''
+            if len(span_child) > 2:
+                week_type = span_child[2].text
 
+            parity_week = PARITY[2][0]
+            is_sem_group_1 = True
+            is_sem_group_2 = True
+
+            if week_type == "SI":
+                parity_week = PARITY[0][0]
+            if week_type == "SP":
+                parity_week = PARITY[1][0]
+
+            if week_type == "Sg1":
+                is_sem_group_2 = False
+            if week_type == "Sg2":
+                is_sem_group_1 = False
+
+            course_date = CourseDate.objects \
+                .create(course=course, room=room, professor=professor,
+                        start_hour=start_hour, end_hour=end_hour,
+                        day_in_week=current_day_in_week, parity_week=parity_week)
+
+        return course_date
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE
 
