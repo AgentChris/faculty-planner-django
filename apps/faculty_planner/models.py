@@ -12,7 +12,7 @@ class Course(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.TextField(max_length=256)
     description = models.TextField(max_length=512)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
         return '%s ...' % (self.name[:32],)
@@ -27,7 +27,7 @@ class Professor(models.Model):
     name = models.TextField(max_length=256)
     link = models.TextField(max_length=256, default="")
     email = models.CharField(max_length=128, null=True, default="")
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
         return '%s ...' % (self.name[:32],)
@@ -93,7 +93,7 @@ class CourseDate(models.Model):
     day_in_week = models.CharField(max_length=5, choices=DAY_IN_WEEK, default=None)
     start_hour = models.DateTimeField(auto_now_add=True, blank=True)
     end_hour = models.DateTimeField(auto_now_add=True, blank=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
 
 class CourseDateGroup(models.Model):
@@ -114,7 +114,7 @@ class Faculty(models.Model):
     name = models.CharField(max_length=128)
     acronym = models.CharField(max_length=128)
     link = models.CharField(max_length=512)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
         return '%s' % (self.name,)
@@ -157,7 +157,7 @@ class Specialization(models.Model):
     with_frequency = models.BooleanField(default=True)
     year = models.IntegerField()
     sem = models.IntegerField()
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
         return '%s... - year %s - sem %s - %s - %s - %s' \
@@ -179,7 +179,7 @@ class Student(models.Model):
     facebook_id = models.TextField(max_length=256)
     name = models.TextField(max_length=256)
     email = models.EmailField(max_length=256)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     specializations = models.ManyToManyField(Specialization, through='StudentSpecialization')
 
 
@@ -192,7 +192,7 @@ class Schedule(models.Model):
     start_date = models.DateTimeField(auto_now_add=True, blank=True)
     end_date = models.DateTimeField(auto_now_add=True, blank=True)
     specialization = models.ForeignKey(Specialization, null=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')
 
 
