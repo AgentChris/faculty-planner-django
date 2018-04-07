@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 
 from .models import StudentSuggestion, Specialization, Student, Schedule
-from .parse_fsega import get_specialization_website_url
+from .parse_fsega import get_specialization_website_url, add_professor_information
 from .services import store_specialization
 
 
@@ -73,3 +73,7 @@ def get_student_suggestion(request, *args, **kwargs):
         response.append(specialization)
 
     return JsonResponse(response, safe=False)
+
+
+def parse_professor_information(request, *args, **kwargs):
+    add_professor_information()

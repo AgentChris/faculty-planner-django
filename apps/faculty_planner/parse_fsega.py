@@ -179,6 +179,7 @@ def create_schedule(specialization):
                                     ScheduleCourseDate.objects \
                                         .create(schedule=schedule, course_date=course_date)
     except UnicodeDecodeError:
+        # https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2
         print("Error in request html for %s with the link: %s" % (specialization.name, specialization.link))
         # for i in range(group_lower_limit, group_upper_limit):
         #     semi_group_one = semi_groups_one[i]
@@ -257,6 +258,13 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour, curren
                         day_in_week=current_day_in_week, parity_week=parity_week)
 
         return course_date
+
+
+# https://econ.ubbcluj.ro/cv.php?id=350
+def add_professor_information():
+    # read email
+    return NotImplemented
+
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE
 

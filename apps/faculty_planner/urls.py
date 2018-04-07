@@ -20,5 +20,6 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^parse/', views.scrape_faculty, name="index"),
+    url(r'^parse/', views.scrape_faculty, name="parse"),
+    url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
 ]
