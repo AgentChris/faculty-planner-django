@@ -6,7 +6,7 @@ from requests_html import HTMLSession
 
 from .models import Faculty, Language, Specialization, Group, Room, \
     Professor, CourseDate, Course, DAY_IN_WEEK, Schedule, PARITY, SpecializationGroup, \
-    ScheduleCourseDate, CourseDateGroup
+    ScheduleCourseDate
 
 FACULTY_ACRONYM = 'FSEGA'
 PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
@@ -108,7 +108,8 @@ def create_schedule(specialization):
 
     table = lxml.html.fromstring(table_path[0].html)
     schedule_html = table.getchildren()[0]
-    index_row = 0
+    index_row = 1
+    current_index_day = 0
 
     for elem_row in schedule_html.getchildren():
         index_row += 1
@@ -135,34 +136,57 @@ def create_schedule(specialization):
                         semi_groups_two.append(group_two)
 
         if index_row > 2:
-            current_day_in_week = DAY_IN_WEEK[index_row - 1][0]
 
             group_lower_limit = 0
             start_hour = ''
             end_hour = ''
-            for elem_column in elem_row.getchildren():
+            elem_row_children = elem_row.getchildren()
+
+            if len(elem_row_children) and elem_row_children[0].attrib.get('rowspan', 0) != 0:
+                elem_row_children.pop(0)
+                current_day_in_week = DAY_IN_WEEK[current_index_day][0]
+            if len(elem_row_children) == 1:
+                elem_row_children.pop(0)
+
+            for elem_column in elem_row_children:
                 if elem_column.tag == "td":
                     index_column += 1
-                if elem_column.tag == "td" and index_column == 2:
+                if elem_column.tag == "td" and index_column == 1:
                     hour = elem_column.getchildren()[0].text.split('-')
                     start_hour_text = hour[0]
                     for CHR in TEXT_STRING:
                         start_hour_text = start_hour_text.replace(CHR, '')
                     start_hour = datetime.strptime(start_hour_text, "%H:%M")
                     end_hour = datetime.strptime(hour[1], "%H:%M")
-                if elem_column.tag == "td" and index_column > 2:
+                if elem_column.tag == "td" and index_column > 1:
                     group_upper_limit = elem_column.attrib.get("colspan", 1)
                     for html_children in elem_column.getchildren():
-                        if not isinstance(html_children, HtmlComment):
+                        if html_children.text == "Pauza":
+                            current_index_day = 0
+                        if not isinstance(html_children, HtmlComment) and html_children.text != "Pauza":
                             div_content_children = html_children.getchildren()
-                            span_list_content_children = div_content_children[0].getchildren()[0].getchildren()
+                            # span_list_content_children = div_content_children[0].getchildren()[0].getchildren()
+                            span_list_content_children = div_content_children[0].getchildren() # here is the problem
+                            ok = 0
+                            if span_list_content_children[0].tag == 'span':
+                                span_list_content_children = span_list_content_children[0].getchildren()
+                            else:
+                                ok = 1
+                                print(span_list_content_children)
 
                             if len(span_list_content_children) > 0:
                                 span_content_children = span_list_content_children[0]
-                                room_name = span_content_children.getchildren()[0].text
+                                if ok == 0:
+                                    room_name = span_content_children.getchildren()[0].text
+                                else:
+                                    room_name = span_content_children.text
                                 room = Room.objects.get_or_create(name=room_name, location=FSEGA_URL_LOCATION)[0]
 
-                                course_name = span_content_children.getchildren()[0].tail
+                                if ok == 0:
+                                    course_name = span_content_children.getchildren()[0].tail
+                                else:
+                                    course_name = span_content_children.tail
+
                                 course = Course.objects.get_or_create(name=course_name)[0]
 
                                 professor_elem = span_content_children[1]
@@ -193,18 +217,18 @@ def create_schedule(specialization):
                                 ScheduleCourseDate.objects \
                                     .create(schedule=schedule, course_date=course_date)
 
-                                for i in range(group_lower_limit, group_upper_limit):
-                                    semi_group_one = semi_groups_one[i]
-                                    semi_group_two = semi_groups_two[i]
-
-                                    if is_sem_group_1:
-                                        CourseDateGroup.objects \
-                                            .create(course_date=course_date, group=semi_group_one)
-                                    if is_sem_group_2:
-                                        CourseDateGroup.objects \
-                                            .create(course_date=course_date, group=semi_group_two)
-
-                                group_lower_limit = group_upper_limit
+                                # for i in range(group_lower_limit, group_upper_limit):
+                                #     semi_group_one = semi_groups_one[i]
+                                #     semi_group_two = semi_groups_two[i]
+                                #
+                                #     if is_sem_group_1:
+                                #         CourseDateGroup.objects \
+                                #             .create(course_date=course_date, group=semi_group_one)
+                                #     if is_sem_group_2:
+                                #         CourseDateGroup.objects \
+                                #             .create(course_date=course_date, group=semi_group_two)
+                                #
+                                # group_lower_limit = group_upper_limit
 
 # Create SpecializationGroup
 # open every link from PAGE1 SEE ABOVE
