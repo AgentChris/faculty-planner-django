@@ -3,6 +3,15 @@ import uuid
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+COURSE = 'C'
+SEMINAR = 'S'
+LABORATORY = 'L'
+COURSE_TYPE = (
+    (COURSE, 'COURSE'),
+    (SEMINAR, 'SEMINAR'),
+    (LABORATORY, 'LABORATORY'),
+)
+
 
 class Course(models.Model):
     class Meta:
@@ -11,11 +20,12 @@ class Course(models.Model):
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.TextField(max_length=256)
+    c_type = models.CharField(max_length=1, choices=COURSE_TYPE, default=COURSE)
     description = models.TextField(max_length=512)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return '%s ...' % (self.name[:32],)
+        return '%s... %s' % (self.name[:52], self.type)
 
 
 class Professor(models.Model):

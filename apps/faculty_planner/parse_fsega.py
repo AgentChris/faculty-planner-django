@@ -6,7 +6,7 @@ from requests_html import HTMLSession
 
 from .models import Faculty, Language, Specialization, Group, Room, \
     Professor, CourseDate, Course, DAY_IN_WEEK, Schedule, PARITY, SpecializationGroup, \
-    ScheduleCourseDate, CourseDateGroup
+    ScheduleCourseDate, CourseDateGroup, COURSE_TYPE
 
 FACULTY_ACRONYM = 'FSEGA'
 PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
@@ -225,7 +225,10 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
             room = Room.objects.get_or_create(name=room_name, location=FSEGA_URL_LOCATION)[0]
 
             course_name = span_child[0].tail
-            course = Course.objects.get_or_create(name=course_name)[0]
+            c_type = COURSE_TYPE[1][0]
+            if course_name.isupper():
+                c_type = COURSE_TYPE[0][0]  # is a seminar
+            course = Course.objects.get_or_create(name=course_name, c_type=c_type)[0]
 
             professor_elem = span_child[1]
             professor_link = specialization.faculty.link + professor_elem.attrib.get("href", "")
@@ -246,7 +249,6 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
                 parity_week = PARITY[1][0]
 
             # TODO add course optional
-            # TODO add course type uppercase - Course, lowercase - Semniar
             # TODO add course reading from semigroup
 
             if week_type == "Sg1":
