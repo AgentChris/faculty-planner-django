@@ -1,5 +1,6 @@
 import json
 
+from django.core import serializers
 from django.http import JsonResponse
 
 from .models import StudentSuggestion, Specialization, Student, Schedule
@@ -56,9 +57,10 @@ def store_student_specialization(request, *args, **kwargs):
 def get_specializations(request, *args, **kwargs):
     faculty_param = request.GET.get('faculty')
 
-    specializations = Specialization.objects.get(faculty=faculty_param)
+    specializations = Specialization.objects.filter(faculty__acronym=faculty_param)
+    data = serializers.serialize('json', specializations)
 
-    return JsonResponse(specializations, safe=False)
+    return JsonResponse(json.loads(data), safe=False)
 
 
 def get_student_suggestion(request, *args, **kwargs):

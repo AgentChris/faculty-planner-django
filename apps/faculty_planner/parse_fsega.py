@@ -9,7 +9,7 @@ from .models import Faculty, Language, Specialization, Group, Room, \
     ScheduleCourseDate, CourseDateGroup, COURSE_TYPE
 
 FACULTY_ACRONYM = 'FSEGA'
-PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
+PREPOSITIONS = [' si ', ' pe ', ' de ', ' a ', ' al ']
 TEXT_STRING = ['\t', '\n', '\r']
 FSEGA_URL_LOCATION = 'https://www.google.ro/maps/place/Faculty+of+Economics+and+Business+Administration/@46.773181,23.620944,15z/data=!4m2!3m1!1s0x0:0xcc357d4dedcf12a0?sa=X&ved=0ahUKEwiQjKWpuqbaAhUEmrQKHQNFBTIQ_BIInwEwCg'
 
@@ -18,9 +18,9 @@ FSEGA_URL_LOCATION = 'https://www.google.ro/maps/place/Faculty+of+Economics+and+
 # open the sidebar then search for "orar"
 # then you will obtain the anchor tag that has the PAGE1 URL
 
-def remove_substring_from_string(array_of_string, string):
+def remove_substring_from_string(array_of_string, string, replace_character=""):
     for array_item in array_of_string:
-        string = string.replace(array_item, '')
+        string = string.replace(array_item, replace_character)
     return string
 
 
@@ -88,9 +88,9 @@ def create_specialization(faculty, link, sem):
                     link_specialization = faculty.link + elem.attrib.get("href")
 
                     name = elem.text[:-9]
-                    name = remove_substring_from_string(PREPOSITIONS, name)
+                    name_for_acronym = remove_substring_from_string(PREPOSITIONS, name, " ")
 
-                    acronym = "".join(e[0] for e in name.split())
+                    acronym = "".join(e[0] for e in name_for_acronym.split())
                     year = int(elem.text[-1])
 
                     specialization = Specialization.objects \
