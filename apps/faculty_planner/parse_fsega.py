@@ -236,8 +236,11 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
             professor = Professor.objects.get_or_create(name=professor_name, link=professor_link)[0]
 
             week_type = ''
+            week_type_opt = ''
+
             if len(span_child) > 2:
                 week_type = span_child[2].text
+                week_type_opt = span_child[2].tail
 
             parity_week = PARITY[2][0]
             is_sem_group_1 = True
@@ -248,8 +251,15 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
             if week_type == "SP":
                 parity_week = PARITY[1][0]
 
-            # TODO add course optional
-            # TODO add course reading from semigroup
+            if week_type_opt == "  - SI":
+                parity_week = PARITY[0][0]
+            if week_type_opt == "  - SP":
+                parity_week = PARITY[1][0]
+
+            if week_type_opt == "  - opt - Sg1":
+                is_sem_group_2 = False
+            if week_type_opt == "  - opt - Sg2":
+                is_sem_group_1 = False
 
             if week_type == "Sg1":
                 is_sem_group_2 = False
@@ -258,7 +268,7 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
 
             course_date = CourseDate.objects \
                 .create(course=course, room=room, professor=professor,
-                        start_hour=start_hour, end_hour=end_hour,
+                        start_hour=start_hour, end_hour=end_hour, extra_info=week_type_opt,
                         day_in_week=current_day_in_week, parity_week=parity_week)
 
             for i in range(lower_group_index_limit, upper_group_index_limit):
@@ -275,8 +285,6 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
 
                 ScheduleCourseDate.objects \
                     .create(schedule=schedule, course_date=course_date)
-
-        # https://econ.ubbcluj.ro/cv.php?id=350
 
 
 def add_professor_information():

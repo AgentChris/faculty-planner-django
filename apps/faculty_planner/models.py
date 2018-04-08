@@ -100,6 +100,7 @@ class CourseDate(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     course = models.ForeignKey(Course)
     parity_week = models.CharField(max_length=1, choices=PARITY, default=EVERY_WEEK)
+    extra_info = models.CharField(max_length=128, default="")
     room = models.ForeignKey(Room)
     groups = models.ManyToManyField(Group, through='CourseDateGroup')
     professor = models.ForeignKey(Professor)
