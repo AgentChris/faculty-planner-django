@@ -133,8 +133,8 @@ def create_schedule(specialization):
                         if index_column > 2:
                             span = elem_column.getchildren()[0]
                             group_name = span.text
-                            for CHR in TEXT_STRING:
-                                group_name = group_name.replace(CHR, '')
+
+                            group_name = remove_substring_from_string(TEXT_STRING, group_name)
 
                             group_one = Group.objects.create(name=group_name, sub_group=1)
                             group_two = Group.objects.create(name=group_name, sub_group=2)
@@ -274,6 +274,7 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
                         start_hour=start_hour, end_hour=end_hour, extra_info=week_type_opt,
                         day_in_week=current_day_in_week, parity_week=parity_week)
 
+            # adding group for schedule
             for i in range(lower_group_index_limit, upper_group_index_limit):
                 if i < len(semi_groups_one):
                     if is_sem_group_1:
@@ -286,24 +287,10 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
                     print("Error in %s for %s for course %s" %
                           (specialization.name, specialization.link, course_date.course.name))
 
-                ScheduleCourseDate.objects \
-                    .create(schedule=schedule, course_date=course_date)
+            ScheduleCourseDate.objects \
+                .create(schedule=schedule, course_date=course_date)
 
 
 def add_professor_information():
     # read email
     return NotImplemented
-
-    # Create SpecializationGroup
-    # open every link from PAGE1 SEE ABOVE
-
-    # Create a Schedule for each group
-    # ? not sure about anymore maybe in phase one we won't need it
-    # maybe we can create a schdule for each student, the initial one will be the one crate
-    # by the faculty and then the student can add more course dates
-    # but in phase we won't do that
-
-    # Create all Groups for specializations
-    # Create Course Date
-
-    # first crate schdule then add it to group by creating SchduleGroup Object

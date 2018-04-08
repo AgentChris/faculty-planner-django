@@ -217,6 +217,10 @@ class Schedule(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')
 
+    def __str__(self):
+        return '%s... %s - %s' \
+               % (self.specialization.name[:32], self.start_date, self.end_date)
+
 
 class ScheduleCourseDate(models.Model):
     course_date = models.ForeignKey(CourseDate)
