@@ -6,7 +6,7 @@ from requests_html import HTMLSession
 
 from .models import Faculty, Language, Specialization, Group, Room, \
     Professor, CourseDate, Course, DAY_IN_WEEK, Schedule, PARITY, SpecializationGroup, \
-    ScheduleCourseDate
+    ScheduleCourseDate, CourseDateGroup
 
 FACULTY_ACRONYM = 'FSEGA'
 PREPOSITIONS = ['si', 'pe', 'de', 'a', 'al']
@@ -17,6 +17,11 @@ FSEGA_URL_LOCATION = 'https://www.google.ro/maps/place/Faculty+of+Economics+and+
 # PAGE0 = https://econ.ubbcluj.ro/
 # open the sidebar then search for "orar"
 # then you will obtain the anchor tag that has the PAGE1 URL
+
+def remove_substring_from_string(array_of_string, string):
+    for array_item in array_of_string:
+        string = string.replace(array_item, '')
+    return string
 
 
 def get_specialization_website_url():
@@ -81,9 +86,10 @@ def create_specialization(faculty, link, sem):
 
                 if elem.tag == 'a':
                     link_specialization = faculty.link + elem.attrib.get("href")
+
                     name = elem.text[:-9]
-                    for prep in PREPOSITIONS:
-                        name = name.replace(' ' + prep, '')
+                    name = remove_substring_from_string(PREPOSITIONS, name)
+
                     acronym = "".join(e[0] for e in name.split())
                     year = int(elem.text[-1])
 
@@ -102,6 +108,7 @@ def create_schedule(specialization):
     session = HTMLSession()
 
     r = session.get(specialization.link)
+    # r = session.get("https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AAG&an=2")
     # r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2')
 
     # get element from path from chrome, right click on the element and copy path selector
@@ -112,7 +119,7 @@ def create_schedule(specialization):
 
         table = lxml.html.fromstring(table_path[0].html)
         schedule_html = table.getchildren()[0]
-        index_row = 1
+        index_row = 0
         current_index_day = 0
         current_day_in_week = None
 
@@ -142,7 +149,7 @@ def create_schedule(specialization):
 
             if index_row > 2:
 
-                group_lower_limit = 0
+                lower_group_index_limit = 0
                 start_hour = ''
                 end_hour = ''
                 elem_row_children = elem_row.getchildren()
@@ -157,42 +164,39 @@ def create_schedule(specialization):
                     if elem_column.tag == "td":
                         index_column += 1
                     if elem_column.tag == "td" and index_column == 1:
+                        # get hour from first td in the tr row
                         hour = elem_column.getchildren()[0].text.split('-')
+
+                        lower_group_index_limit = 0
                         start_hour_text = hour[0]
-                        for CHR in TEXT_STRING:
-                            start_hour_text = start_hour_text.replace(CHR, '')
+                        start_hour_text = remove_substring_from_string(TEXT_STRING, start_hour_text)
+
                         start_hour = datetime.strptime(start_hour_text, "%H:%M")
                         end_hour = datetime.strptime(hour[1], "%H:%M")
+
                     if elem_column.tag == "td" and index_column > 1:
-                        # group_upper_limit = elem_column.attrib.get("colspan", 1)
+                        upper_group_index_limit = int(elem_column.attrib.get("colspan", 2)) - 1
                         elem_column = remove_comments(elem_column.getchildren())
 
                         if len(elem_column) > 0:
                             if elem_column[0].tag == "font":  # is a break (Pauza)
                                 current_index_day += 1
                             else:
-                                course_date = get_data_from_cell(
+                                upper_group_index_limit += lower_group_index_limit
+
+                                get_data_from_cell(
                                     elem_column=elem_column, specialization=specialization,
                                     start_hour=start_hour, end_hour=end_hour,
-                                    current_day_in_week=current_day_in_week)
-                                if course_date:
-                                    ScheduleCourseDate.objects \
-                                        .create(schedule=schedule, course_date=course_date)
+                                    lower_group_index_limit=lower_group_index_limit,
+                                    upper_group_index_limit=upper_group_index_limit,
+                                    semi_groups_one=semi_groups_one, semi_groups_two=semi_groups_two,
+                                    current_day_in_week=current_day_in_week, schedule=schedule)
+
+                                lower_group_index_limit = upper_group_index_limit
+
     except UnicodeDecodeError:
         # https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2
         print("Error in request html for %s with the link: %s" % (specialization.name, specialization.link))
-        # for i in range(group_lower_limit, group_upper_limit):
-        #     semi_group_one = semi_groups_one[i]
-        #     semi_group_two = semi_groups_two[i]
-        #
-        #     if is_sem_group_1:
-        #         CourseDateGroup.objects \
-        #             .create(course_date=course_date, group=semi_group_one)
-        #     if is_sem_group_2:
-        #         CourseDateGroup.objects \
-        #             .create(course_date=course_date, group=semi_group_two)
-        #
-        # group_lower_limit = group_upper_limit
 
 
 def remove_comments(html_elements):
@@ -203,9 +207,9 @@ def remove_comments(html_elements):
     return new_elems
 
 
-def get_data_from_cell(elem_column, specialization, start_hour, end_hour, current_day_in_week):
-    course_date = None
-
+def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
+                       current_day_in_week, schedule, lower_group_index_limit,
+                       semi_groups_one, semi_groups_two, upper_group_index_limit):
     for div_elem in elem_column:
         span_elem = div_elem.getchildren()[0]
 
@@ -241,8 +245,6 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour, curren
             if week_type == "SP":
                 parity_week = PARITY[1][0]
 
-            # TODO add to semigroup
-            # TODO add groups
             # TODO add course optional
             # TODO add course type uppercase - Course, lowercase - Semniar
             # TODO add course reading from semigroup
@@ -257,25 +259,38 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour, curren
                         start_hour=start_hour, end_hour=end_hour,
                         day_in_week=current_day_in_week, parity_week=parity_week)
 
-        return course_date
+            for i in range(lower_group_index_limit, upper_group_index_limit):
+                if i < len(semi_groups_one):
+                    if is_sem_group_1:
+                        CourseDateGroup.objects \
+                            .create(group=semi_groups_one[i], course_date=course_date)
+                    if is_sem_group_2:
+                        CourseDateGroup.objects \
+                            .create(group=semi_groups_two[i], course_date=course_date)
+                else:
+                    print("Error in %s for %s for course %s" %
+                          (specialization.name, specialization.link, course_date.course.name))
+
+                ScheduleCourseDate.objects \
+                    .create(schedule=schedule, course_date=course_date)
+
+        # https://econ.ubbcluj.ro/cv.php?id=350
 
 
-# https://econ.ubbcluj.ro/cv.php?id=350
 def add_professor_information():
     # read email
     return NotImplemented
 
-# Create SpecializationGroup
-# open every link from PAGE1 SEE ABOVE
+    # Create SpecializationGroup
+    # open every link from PAGE1 SEE ABOVE
 
-# Create a Schedule for each group
-# ? not sure about anymore maybe in phase one we won't need it
-# maybe we can create a schdule for each student, the initial one will be the one crate
-# by the faculty and then the student can add more course dates
-# but in phase we won't do that
+    # Create a Schedule for each group
+    # ? not sure about anymore maybe in phase one we won't need it
+    # maybe we can create a schdule for each student, the initial one will be the one crate
+    # by the faculty and then the student can add more course dates
+    # but in phase we won't do that
 
+    # Create all Groups for specializations
+    # Create Course Date
 
-# Create all Groups for specializations
-# Create Course Date
-
-# first crate schdule then add it to group by creating SchduleGroup Object
+    # first crate schdule then add it to group by creating SchduleGroup Object
