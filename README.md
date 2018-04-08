@@ -36,5 +36,10 @@ python manage.py runserver
 ## API documentation
 We plan on using swager
 
+### Postman api
+```
+https://www.getpostman.com/collections/772aaff0c28363b565d8
+```
+
 ## Architecture Documentation
 We are using the ADR: https://www.thoughtworks.com/radar/techniques/lightweight-architecture-decision-records
