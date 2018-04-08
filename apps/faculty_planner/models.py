@@ -25,7 +25,7 @@ class Course(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return '%s... %s' % (self.name[:52], self.type)
+        return '%s... %s' % (self.name[:52], self.c_type)
 
 
 class Professor(models.Model):
@@ -63,6 +63,9 @@ class Group(models.Model):
 
     name = models.CharField(max_length=128)
     sub_group = models.IntegerField()
+
+    def __str__(self):
+        return '%s - sg%s' % (self.name, self.sub_group)
 
 
 MONDAY = 'MON'
@@ -105,8 +108,8 @@ class CourseDate(models.Model):
     groups = models.ManyToManyField(Group, through='CourseDateGroup')
     professor = models.ForeignKey(Professor)
     day_in_week = models.CharField(max_length=5, choices=DAY_IN_WEEK, default=None)
-    start_hour = models.DateTimeField(auto_now_add=True, blank=True)
-    end_hour = models.DateTimeField(auto_now_add=True, blank=True)
+    start_hour = models.TimeField(null=True)
+    end_hour = models.TimeField(null=True)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
@@ -208,8 +211,8 @@ class Schedule(models.Model):
         verbose_name_plural = _('Schedules')
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-    start_date = models.DateTimeField(auto_now_add=True, blank=True)
-    end_date = models.DateTimeField(auto_now_add=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     specialization = models.ForeignKey(Specialization, null=True)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')

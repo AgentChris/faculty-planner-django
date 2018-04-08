@@ -225,7 +225,10 @@ def get_data_from_cell(elem_column, specialization, start_hour, end_hour,
             room = Room.objects.get_or_create(name=room_name, location=FSEGA_URL_LOCATION)[0]
 
             course_name = span_child[0].tail
+            course_name = course_name[:-2]
+
             c_type = COURSE_TYPE[1][0]
+
             if course_name.isupper():
                 c_type = COURSE_TYPE[0][0]  # is a seminar
             course = Course.objects.get_or_create(name=course_name, c_type=c_type)[0]
