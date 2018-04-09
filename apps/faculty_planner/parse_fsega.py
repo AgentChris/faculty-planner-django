@@ -107,7 +107,9 @@ def create_schedule(specialization):
 
     session = HTMLSession()
 
-    r = session.get(specialization.link)
+    # r = session.get(specialization.link)
+    # TODO investigate why doesn't add all course date on week
+    r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIGF&an=3')
     # r = session.get("https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AAG&an=2")
     # r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2')
 
