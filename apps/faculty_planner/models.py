@@ -61,6 +61,7 @@ class Group(models.Model):
         verbose_name = _('Group')
         verbose_name_plural = _('Groups')
 
+    uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     name = models.CharField(max_length=128)
     sub_group = models.IntegerField()
 

@@ -1,9 +1,9 @@
 import json
 
-from django.core import serializers
 from django.http import JsonResponse
 
 from .models import StudentSuggestion, Specialization, Student, Schedule
+from .serializers import SpecializationSerializer
 from .parse_fsega import get_specialization_website_url, add_professor_information
 from .services import store_specialization
 
@@ -58,9 +58,9 @@ def get_specializations(request, *args, **kwargs):
     faculty_param = request.GET.get('faculty')
 
     specializations = Specialization.objects.filter(faculty__acronym=faculty_param)
-    data = serializers.serialize('json', specializations)
+    specializations_serializer = SpecializationSerializer(specializations, many=True)
 
-    return JsonResponse(json.loads(data), safe=False)
+    return JsonResponse(specializations_serializer.data, safe=False)
 
 
 def get_student_suggestion(request, *args, **kwargs):
