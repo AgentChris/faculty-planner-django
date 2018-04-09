@@ -21,6 +21,7 @@ from . import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^specialization/', views.get_specializations, name="get_specializations"),
+    url(r'^schedule/', views.get_schedule_by_group, name="get_schedule_by_group"),
     url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
     url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
 ]

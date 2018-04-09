@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import Specialization, Group, Faculty, Language
+from .models import Specialization, Group, Faculty, Language, \
+    CourseDate
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -30,3 +31,9 @@ class SpecializationSerializer(serializers.ModelSerializer):
         model = Specialization
         fields = ('uuid', 'name', 'acronym', 'degree', 'faculty',
                   'year', 'sem', 'language', 'groups', 'with_frequency',)
+
+
+class CourseDateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseDate
+        fields = ('uuid',)

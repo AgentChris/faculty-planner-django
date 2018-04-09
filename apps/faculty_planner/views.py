@@ -2,9 +2,10 @@ import json
 
 from django.http import JsonResponse
 
-from .models import StudentSuggestion, Specialization, Student, Schedule
-from .serializers import SpecializationSerializer
+from .models import StudentSuggestion, Specialization, Student, \
+    Schedule, CourseDate, Group
 from .parse_fsega import get_specialization_website_url, add_professor_information
+from .serializers import SpecializationSerializer, CourseDateSerializer
 from .services import store_specialization
 
 
@@ -52,6 +53,15 @@ def store_student_specialization(request, *args, **kwargs):
     specialization = store_specialization(student_uuid=uuid, specialization_uuid=specialization_uuid)
 
     return JsonResponse(specialization, safe=False)
+
+
+def get_schedule_by_group(request, *args, **kwargs):
+    group_uuid_param = request.GET.get('group')
+
+    course_date = CourseDate.objects.filter(groups__uuid__contains=group_uuid_param)
+    course_date_serializer = CourseDateSerializer(course_date, many=True)
+
+    return JsonResponse(course_date_serializer.data, safe=False)
 
 
 def get_specializations(request, *args, **kwargs):
