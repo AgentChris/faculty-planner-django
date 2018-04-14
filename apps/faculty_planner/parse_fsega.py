@@ -115,7 +115,7 @@ def create_schedule(specialization):
 
     # get element from path from chrome, right click on the element and copy path selector
     # remove tbody from searching, is not working
-    r.html.encoding = r.encoding
+    # r.html.encoding = r.encoding
     try:
         table_path = r.html.find("#section-to-print > tr > td > table")
 
