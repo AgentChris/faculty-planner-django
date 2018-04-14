@@ -107,9 +107,10 @@ def create_schedule(specialization):
 
     session = HTMLSession()
 
-    # r = session.get(specialization.link)
+    r = session.get(specialization.link)
     # TODO investigate why doesn't add all course date on week
-    r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIGF&an=3')
+    # r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=MDAE&an=2')
+    # r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=CIGF&an=3')
     # r = session.get("https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=AAG&an=2")
     # r = session.get('https://econ.ubbcluj.ro/orar/orar-sem-2.php?acronim=EAM&an=2')
 
@@ -177,7 +178,7 @@ def create_schedule(specialization):
                         end_hour = datetime.strptime(hour[1], "%H:%M")
 
                     if elem_column.tag == "td" and index_column > 1:
-                        upper_group_index_limit = int(elem_column.attrib.get("colspan", 2)) - 1
+                        upper_group_index_limit = int(elem_column.attrib.get("colspan", 1))
                         elem_column = remove_comments(elem_column.getchildren())
 
                         if len(elem_column) > 0:
