@@ -145,7 +145,7 @@ def create_schedule(specialization):
                             SpecializationGroup.objects \
                                 .create(specialization=specialization, group=group_one)
                             SpecializationGroup.objects \
-                                .create(specialization=specialization, group=group_one)
+                                .create(specialization=specialization, group=group_two)
 
                             semi_groups_one.append(group_one)
                             semi_groups_two.append(group_two)
