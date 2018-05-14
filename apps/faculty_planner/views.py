@@ -1,5 +1,6 @@
 import json
 
+import pandas as pd
 from django.http import JsonResponse
 
 from .models import StudentSuggestion, Specialization, Student, \
@@ -58,10 +59,62 @@ def store_student_specialization(request, *args, **kwargs):
 def get_schedule_by_group(request, *args, **kwargs):
     group_uuid_param = request.GET.get('group')
 
-    course_date = CourseDate.objects.filter(groups__uuid__contains=group_uuid_param)
-    course_date_serializer = CourseDateSerializer(course_date, many=True)
+    course_dates = CourseDate.objects.filter(groups__uuid__contains=group_uuid_param)
 
-    return JsonResponse(course_date_serializer.data, safe=False)
+    specialization = Specialization.objects.get(groups__uuid__contains=group_uuid_param)
+
+    faculty = specialization.faculty
+    year = specialization.year
+    sem = specialization.sem
+    degree = specialization.degree
+
+    final = False
+    # TODO this rule may vary bettween faculties
+    # here i determine the final years
+    if ((degree == 'DOCTORAL' or degree == 'MASTER') and
+        year == 2) or (final == 'BACHELOR' and year == 3):
+        final = True
+
+    year_structures = YearStructure.objects \
+        .filter(faculty=faculty, year=2018, sem=sem, final_years=final)
+
+    response = []
+    if year_structures:
+        for period in year_structures.first().days.all():
+            if period.type == 'F':  # if is a period of days which is a FACULTY_DAY then this is the schedule
+                date_range = pd.date_range(period.start_date, period.end_date)
+                week_index = 0
+                is_week_odd = True  # determine if week is odd or even
+                for single_date in date_range:
+                    week_index += 1
+                    if week_index == 6:
+                        week_index = 0
+                        is_week_odd = not is_week_odd
+
+                    day_index = single_date.date().weekday()
+                    response_item = {"date": single_date.strftime("%Y-%m-%d"), "course_dates": []}
+
+                    for course_date in course_dates:
+                        day_in_week = course_date.day_in_week
+                        parity_week = course_date.parity_week
+
+                        # check to see if the current day is valid for the current course_date
+                        if parity_week == 'W' or (is_week_odd and parity_week == 'O') \
+                            or (not is_week_odd and parity_week == 'E'):
+
+                            if day_in_week == 'MON' and day_index == 0 or \
+                                day_in_week == 'TUES' and day_index == 1 or \
+                                day_in_week == 'WED' and day_index == 2 or \
+                                day_in_week == 'THURS' and day_index == 3 or \
+                                day_in_week == 'FRI' and day_index == 4 or \
+                                day_in_week == 'SAT' and day_index == 5 or \
+                                day_in_week == 'SUN' and day_index == 6:
+                                course_date_data = CourseDateSerializer(course_date, many=False)
+                                response_item['course_dates'].append(course_date_data.data)
+
+                    response.append(response_item)
+
+    return JsonResponse(response, safe=False)
 
 
 def get_specializations(request, *args, **kwargs):
