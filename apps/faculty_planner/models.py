@@ -265,7 +265,6 @@ DAY_TYPE = (
 
 class DayType(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-
     type = models.CharField(max_length=5, choices=DAY_TYPE, default=FACULTY_DAY)
     detail = models.CharField(max_length=256, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
@@ -281,11 +280,11 @@ class YearStructure(models.Model):
         verbose_name = _('Year Structure')
         verbose_name_plural = _('Year Structures')
 
+    uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     sem = models.IntegerField()
     year = models.IntegerField()
     faculty = models.ForeignKey(Faculty)
     final_years = models.BooleanField(default=False)
-    uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     days = models.ManyToManyField(DayType, through='YearStructureDayType')
 
     def __str__(self):

@@ -3,9 +3,9 @@ import json
 from django.http import JsonResponse
 
 from .models import StudentSuggestion, Specialization, Student, \
-    Schedule, CourseDate, Group
+    Schedule, CourseDate, YearStructure, Faculty
 from .parse_fsega import get_specialization_website_url, add_professor_information
-from .serializers import SpecializationSerializer, CourseDateSerializer
+from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer
 from .services import store_specialization
 
 
@@ -89,3 +89,27 @@ def get_student_suggestion(request, *args, **kwargs):
 
 def parse_professor_information(request, *args, **kwargs):
     add_professor_information()
+
+
+def get_course_dates(request, *args, **kwargs):
+    faculty_param = request.GET.get('faculty', 'FSEGA')
+    year_param = request.GET.get('year', 1)
+    sem_param = request.GET.get('sem', 1)
+    final_param = request.GET.get('final')
+
+    final = False
+    if final_param == 'true':
+        final = True
+
+    faculty = Faculty.objects.get(acronym=faculty_param)
+    year_structures = YearStructure.objects \
+        .get(faculty=faculty, year=year_param, sem=sem_param, final_years=final)
+
+    response = []
+
+    if year_structures:
+        for day in year_structures.days.all():
+            day_serializer = DayTypeSerializer(day, many=False)
+            response.append(day_serializer.data)
+
+    return JsonResponse(response, safe=False)

@@ -28,4 +28,5 @@ For May(2018) E.g:
 ### TODO:
 
 - [ ] Parse year structure (https://econ.ubbcluj.ro/documente2018/Structura%20anului%20universitar%202018-2019,%20RO,EN,FR,%20nivel%20Licenta%20si%20Master,%20IF.pdf)
+- [x] Create models for year structure
 - [ ] Create endpoint to get all date to a specific month, year
