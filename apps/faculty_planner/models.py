@@ -271,6 +271,10 @@ class DayType(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
 
+    def __str__(self):
+        return '%s... %s - %s - %s' \
+               % (self.detail[:32], self.start_date, self.end_date, self.type)
+
 
 class YearStructure(models.Model):
     class Meta:
@@ -282,6 +286,10 @@ class YearStructure(models.Model):
     final_years = models.BooleanField(default=False)
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     days = models.ManyToManyField(DayType, through='YearStructureDayType')
+
+    def __str__(self):
+        return 'Anul %s Semestrul %s Is Final Year? %s' \
+               % (self.year, self.sem, self.final_years)
 
 
 class YearStructureDayType(models.Model):
