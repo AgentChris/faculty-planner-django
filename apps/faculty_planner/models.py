@@ -245,3 +245,45 @@ class StudentSpecialization(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     student = models.ForeignKey(Student)
     specialization = models.ForeignKey(Specialization)
+
+
+FACULTY_DAY = 'F'
+HOLY_DAY = 'H'
+EXAMS_SESSION = 'ES'
+EXAMS_DEBT = 'ED'
+PREPARATION_DISSERTATION_BACHELOR_EXAM = 'PDBE'
+DISSERTATION_BACHELOR_EXAM = 'DBE'
+DAY_TYPE = (
+    (FACULTY_DAY, 'FACULTY_DAY'),
+    (HOLY_DAY, 'HOLY_DAY'),
+    (EXAMS_SESSION, 'EXAMS_SESSION'),
+    (EXAMS_DEBT, 'EXAMS_DEBT'),
+    (DISSERTATION_BACHELOR_EXAM, 'DISSERTATION_BACHELOR_EXAM'),
+    (PREPARATION_DISSERTATION_BACHELOR_EXAM, 'PREPARATION_DISSERTATION_BACHELOR_EXAM'),
+)
+
+
+class DayType(models.Model):
+    uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
+
+    type = models.CharField(max_length=5, choices=DAY_TYPE, default=FACULTY_DAY)
+    detail = models.CharField(max_length=256, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+
+
+class YearStructure(models.Model):
+    class Meta:
+        verbose_name = _('Year Structure')
+        verbose_name_plural = _('Year Structures')
+
+    sem = models.IntegerField()
+    year = models.IntegerField()
+    final_years = models.BooleanField(default=False)
+    uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
+    holy_day = models.ManyToManyField(DayType, through='YearStructureDayType')
+
+
+class YearStructureDayType(models.Model):
+    year_structure = models.ForeignKey(YearStructure)
+    holy_day = models.ForeignKey(DayType)
