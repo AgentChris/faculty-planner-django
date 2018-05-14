@@ -283,6 +283,7 @@ class YearStructure(models.Model):
 
     sem = models.IntegerField()
     year = models.IntegerField()
+    faculty = models.ForeignKey(Faculty)
     final_years = models.BooleanField(default=False)
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     days = models.ManyToManyField(DayType, through='YearStructureDayType')
