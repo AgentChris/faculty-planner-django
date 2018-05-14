@@ -91,7 +91,7 @@ def parse_professor_information(request, *args, **kwargs):
     add_professor_information()
 
 
-def get_course_dates(request, *args, **kwargs):
+def get_year_structures(request, *args, **kwargs):
     faculty_param = request.GET.get('faculty', 'FSEGA')
     year_param = request.GET.get('year', 1)
     sem_param = request.GET.get('sem', 1)

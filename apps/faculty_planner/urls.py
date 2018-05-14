@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^specialization/', views.get_specializations, name="get_specializations"),
     url(r'^schedule/', views.get_schedule_by_group, name="get_schedule_by_group"),
     url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
-    url(r'^course_dates/', views.get_course_dates, name="course_dates"),
+    url(r'^year_structures/', views.get_year_structures, name="year_structures"),
     url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
 ]
