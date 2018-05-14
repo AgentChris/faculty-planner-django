@@ -2,7 +2,11 @@ from django.contrib import admin
 
 from .models import Faculty, Specialization, Language, \
     CourseDate, Schedule, Professor, Course, Group, Room, \
-    YearStructure
+    YearStructure, DayType
+
+
+class DayTypeAdmin(admin.ModelAdmin):
+    model = DayType
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -77,6 +81,7 @@ admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Room, RoomAdmin)
+admin.site.register(DayType, DayTypeAdmin)
 admin.site.register(Professor, ProfessorAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Schedule, ScheduleAdminForm)
