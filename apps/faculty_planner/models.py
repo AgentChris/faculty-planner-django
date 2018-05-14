@@ -281,7 +281,7 @@ class YearStructure(models.Model):
     year = models.IntegerField()
     final_years = models.BooleanField(default=False)
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-    holy_day = models.ManyToManyField(DayType, through='YearStructureDayType')
+    days = models.ManyToManyField(DayType, through='YearStructureDayType')
 
 
 class YearStructureDayType(models.Model):

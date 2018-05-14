@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import Faculty, Specialization, Language, \
-    CourseDate, Schedule, Professor, Course, Group, Room
+    CourseDate, Schedule, Professor, Course, Group, Room, \
+    YearStructure
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -26,6 +27,11 @@ class FacultyAdmin(admin.ModelAdmin):
 
 class LanguageAdmin(admin.ModelAdmin):
     model = Language
+
+
+class DayTypeInline(admin.TabularInline):
+    model = YearStructure.days.through
+    extra = 0
 
 
 class CourseDateInline(admin.TabularInline):
@@ -62,6 +68,11 @@ class CourseDateAdminForm(admin.ModelAdmin):
     readonly_fields = ('updated',)
 
 
+class YearStructureAdminForm(admin.ModelAdmin):
+    inlines = [DayTypeInline, ]
+    model = YearStructure
+
+
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -71,3 +82,4 @@ admin.site.register(Language, LanguageAdmin)
 admin.site.register(Schedule, ScheduleAdminForm)
 admin.site.register(Specialization, SpecializationAdmin)
 admin.site.register(CourseDate, CourseDateAdminForm)
+admin.site.register(YearStructure, YearStructureAdminForm)
