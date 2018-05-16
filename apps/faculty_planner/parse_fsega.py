@@ -51,7 +51,7 @@ def get_specialization_website_url():
 # Get degree type
 # Get specialization name
 # Get year
-
+# Pillow for pdf to image
 
 def create_specialization(faculty, link, sem):
     session = HTMLSession()
