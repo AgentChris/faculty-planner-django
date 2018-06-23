@@ -129,6 +129,7 @@ def get_specializations(request, *args, **kwargs):
 
 class ApiEndpoint(ProtectedResourceView):
     def get(self, request, *args, **kwargs):
+        print(request.resource_owner.__dict__)
         return HttpResponse('Hello, OAuth2!')
 
 

@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 COURSE = 'C'
@@ -124,8 +125,8 @@ class CourseDateGroup(models.Model):
         verbose_name = _('Course Date')
         verbose_name_plural = _('Course Dates')
 
-    course_date = models.ForeignKey(CourseDate, on_delete=models.CASCADE,)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE,)
+    course_date = models.ForeignKey(CourseDate, on_delete=models.CASCADE, )
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, )
 
 
 class Faculty(models.Model):
@@ -170,9 +171,9 @@ class Specialization(models.Model):
         verbose_name_plural = _('Specializations')
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE,)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, )
     groups = models.ManyToManyField(Group, through='SpecializationGroup')
-    language = models.ForeignKey(Language, on_delete=models.CASCADE,)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, )
     name = models.CharField(max_length=256)
     link = models.CharField(max_length=512)
     acronym = models.CharField(max_length=128)
@@ -189,8 +190,8 @@ class Specialization(models.Model):
 
 
 class SpecializationGroup(models.Model):
-    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE,)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE,)
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, )
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, )
 
 
 class Student(models.Model):
@@ -199,7 +200,7 @@ class Student(models.Model):
         verbose_name_plural = _('Students')
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-    facebook_id = models.TextField(max_length=256)
+    user = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
     name = models.TextField(max_length=256)
     email = models.EmailField(max_length=256)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -214,7 +215,7 @@ class Schedule(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    specialization = models.ForeignKey(Specialization, null=True, on_delete=models.CASCADE,)
+    specialization = models.ForeignKey(Specialization, null=True, on_delete=models.CASCADE, )
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')
 
@@ -224,8 +225,8 @@ class Schedule(models.Model):
 
 
 class ScheduleCourseDate(models.Model):
-    course_date = models.ForeignKey(CourseDate, on_delete=models.CASCADE,)
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE,)
+    course_date = models.ForeignKey(CourseDate, on_delete=models.CASCADE, )
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, )
 
 
 class StudentSuggestion(models.Model):
@@ -234,7 +235,7 @@ class StudentSuggestion(models.Model):
         verbose_name_plural = _('Student Suggestions')
 
     name = models.CharField(max_length=256)
-    specialization_group = models.ForeignKey(SpecializationGroup, on_delete=models.CASCADE,)
+    specialization_group = models.ForeignKey(SpecializationGroup, on_delete=models.CASCADE, )
 
 
 class StudentSpecialization(models.Model):
@@ -243,8 +244,8 @@ class StudentSpecialization(models.Model):
         verbose_name_plural = _('Student Specializations')
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE,)
-    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE,)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, )
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, )
 
 
 FACULTY_DAY = 'F'
@@ -283,7 +284,7 @@ class YearStructure(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     sem = models.IntegerField()
     year = models.IntegerField()
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE,)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, )
     final_years = models.BooleanField(default=False)
     days = models.ManyToManyField(DayType, through='YearStructureDayType')
 
@@ -293,5 +294,5 @@ class YearStructure(models.Model):
 
 
 class YearStructureDayType(models.Model):
-    year_structure = models.ForeignKey(YearStructure, on_delete=models.CASCADE,)
-    holy_day = models.ForeignKey(DayType, on_delete=models.CASCADE,)
+    year_structure = models.ForeignKey(YearStructure, on_delete=models.CASCADE, )
+    holy_day = models.ForeignKey(DayType, on_delete=models.CASCADE, )
