@@ -1,13 +1,14 @@
 import json
 
 import pandas as pd
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from .models import StudentSuggestion, Specialization, Student, \
     Schedule, CourseDate, YearStructure, Faculty
 from .parse_fsega import get_specialization_website_url, add_professor_information
 from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer
 from .services import store_specialization
+from oauth2_provider.views.generic import ProtectedResourceView
 
 
 # from django.core.exceptions import ObjectDoesNotExist
@@ -124,6 +125,11 @@ def get_specializations(request, *args, **kwargs):
     specializations_serializer = SpecializationSerializer(specializations, many=True)
 
     return JsonResponse(specializations_serializer.data, safe=False)
+
+
+class ApiEndpoint(ProtectedResourceView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, OAuth2!')
 
 
 def get_student_suggestion(request, *args, **kwargs):
