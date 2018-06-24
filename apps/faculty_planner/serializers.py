@@ -1,7 +1,8 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import Specialization, Group, Faculty, Language, \
-    CourseDate, Course, Room, Professor, DayType
+    CourseDate, Course, Room, Professor, DayType, Student
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -69,3 +70,17 @@ class DayTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = DayType
         fields = ('uuid', 'type', 'detail', 'start_date', 'end_date')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+
+    class Meta:
+        model = Student
+        fields = '__all__'

@@ -25,6 +25,6 @@ urlpatterns = [
     url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
     url(r'^year_structures/', views.get_year_structures, name="year_structures"),
     url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
-    url(r'^api/hello', views.ApiEndpoint.as_view()),
+    url(r'^student/', views.create_student, name="student_data"),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 ]

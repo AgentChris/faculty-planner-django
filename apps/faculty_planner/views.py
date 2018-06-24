@@ -1,14 +1,15 @@
 import json
 
 import pandas as pd
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from oauth2_provider.decorators import rw_protected_resource
 
 from .models import StudentSuggestion, Specialization, Student, \
     Schedule, CourseDate, YearStructure, Faculty
 from .parse_fsega import get_specialization_website_url, add_professor_information
-from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer
+from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer, StudentSerializer
 from .services import store_specialization
-from oauth2_provider.views.generic import ProtectedResourceView
 
 
 # from django.core.exceptions import ObjectDoesNotExist
@@ -32,15 +33,25 @@ def get_schedule_by_specialization_uuid(request, *args, **kwargs):
     return JsonResponse(schedule, safe=False)
 
 
+@csrf_exempt
+@rw_protected_resource()
 def create_student(request, *args, **kwargs):
+    # create student association with facebook user oauth2
+
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
 
     name = body.get('name')
     email = body.get('email')
-    facebook_id = body.get('facebook_id')
 
-    Student.objects.create(name=name, email=email, facebook_id=facebook_id)
+    student = Student.objects.get(user=request.user)
+
+    if not student:
+        student = Student.objects.create(name=name, email=email, user=request.user)
+
+    student_data = StudentSerializer(student, many=False)
+
+    return JsonResponse(student_data.data, safe=False)
 
 
 def store_student_specialization(request, *args, **kwargs):
@@ -118,6 +129,7 @@ def get_schedule_by_group(request, *args, **kwargs):
     return JsonResponse(response, safe=False)
 
 
+@rw_protected_resource()
 def get_specializations(request, *args, **kwargs):
     faculty_param = request.GET.get('faculty')
 
@@ -125,12 +137,6 @@ def get_specializations(request, *args, **kwargs):
     specializations_serializer = SpecializationSerializer(specializations, many=True)
 
     return JsonResponse(specializations_serializer.data, safe=False)
-
-
-class ApiEndpoint(ProtectedResourceView):
-    def get(self, request, *args, **kwargs):
-        print(request.resource_owner.__dict__)
-        return HttpResponse('Hello, OAuth2!')
 
 
 def get_student_suggestion(request, *args, **kwargs):
