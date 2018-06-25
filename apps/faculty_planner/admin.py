@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Faculty, Specialization, Language, \
     CourseDate, Schedule, Professor, Course, Group, Room, \
-    YearStructure, DayType
+    YearStructure, DayType, Student
 
 
 class DayTypeAdmin(admin.ModelAdmin):
@@ -11,6 +11,10 @@ class DayTypeAdmin(admin.ModelAdmin):
 
 class GroupAdmin(admin.ModelAdmin):
     model = Group
+
+
+class StudentAdmin(admin.ModelAdmin):
+    model = Student
 
 
 class RoomAdmin(admin.ModelAdmin):
@@ -31,6 +35,11 @@ class FacultyAdmin(admin.ModelAdmin):
 
 class LanguageAdmin(admin.ModelAdmin):
     model = Language
+
+
+class StudentSpecializationInline(admin.TabularInline):
+    model = Student.specializations.through
+    extra = 0
 
 
 class DayTypeInline(admin.TabularInline):
@@ -77,9 +86,15 @@ class YearStructureAdminForm(admin.ModelAdmin):
     model = YearStructure
 
 
+class StudentAdminForm(admin.ModelAdmin):
+    inlines = [StudentSpecializationInline, ]
+    model = Student
+
+
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Group, GroupAdmin)
+admin.site.register(Student, StudentAdminForm)
 admin.site.register(Room, RoomAdmin)
 admin.site.register(DayType, DayTypeAdmin)
 admin.site.register(Professor, ProfessorAdmin)

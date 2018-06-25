@@ -200,7 +200,7 @@ class Student(models.Model):
         verbose_name_plural = _('Students')
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
-    user = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
     name = models.TextField(max_length=256)
     email = models.EmailField(max_length=256)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -215,7 +215,7 @@ class Schedule(models.Model):
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    specialization = models.ForeignKey(Specialization, null=True, on_delete=models.CASCADE, )
+    specialization = models.ForeignKey(Specialization, null=True, on_delete=models.SET_NULL, )
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     course_dates = models.ManyToManyField(CourseDate, through='ScheduleCourseDate')
 

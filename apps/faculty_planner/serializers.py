@@ -79,8 +79,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False)
+    specializations = SpecializationSerializer(many=True)
+    # user = UserSerializer(many=False)
 
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ('name', 'email', 'specializations')

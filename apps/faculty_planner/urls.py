@@ -14,9 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
+from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 
 from . import views
+
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'student', views.StudentView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,6 +30,6 @@ urlpatterns = [
     url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
     url(r'^year_structures/', views.get_year_structures, name="year_structures"),
     url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
-    url(r'^student/', views.create_student, name="student_data"),
+    url(r'^', include(router.urls)),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 ]

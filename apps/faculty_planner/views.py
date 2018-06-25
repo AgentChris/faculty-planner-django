@@ -2,11 +2,12 @@ import json
 
 import pandas as pd
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 from oauth2_provider.decorators import rw_protected_resource
+from oauth2_provider.views import ProtectedResourceView
+from rest_framework import mixins, viewsets, permissions
 
-from .models import StudentSuggestion, Specialization, Student, \
-    Schedule, CourseDate, YearStructure, Faculty
+from .models import StudentSuggestion, Specialization, Schedule, CourseDate, YearStructure, Faculty, Student
 from .parse_fsega import get_specialization_website_url, add_professor_information
 from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer, StudentSerializer
 from .services import store_specialization
@@ -31,27 +32,6 @@ def get_schedule_by_specialization_uuid(request, *args, **kwargs):
     schedule = Schedule.objects.get(specialization=specialization)
 
     return JsonResponse(schedule, safe=False)
-
-
-@csrf_exempt
-@rw_protected_resource()
-def create_student(request, *args, **kwargs):
-    # create student association with facebook user oauth2
-
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-
-    name = body.get('name')
-    email = body.get('email')
-
-    student = Student.objects.get(user=request.user)
-
-    if not student:
-        student = Student.objects.create(name=name, email=email, user=request.user)
-
-    student_data = StudentSerializer(student, many=False)
-
-    return JsonResponse(student_data.data, safe=False)
 
 
 def store_student_specialization(request, *args, **kwargs):
@@ -179,3 +159,30 @@ def get_year_structures(request, *args, **kwargs):
             response.append(day_serializer.data)
 
     return JsonResponse(response, safe=False)
+
+
+class StudentView(mixins.RetrieveModelMixin, mixins.ListModelMixin, ProtectedResourceView, viewsets.GenericViewSet):
+    queryset = Student.objects.all()
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    serializer_class = SpecializationSerializer
+
+    def list(self, request, *args, **kwargs):
+        student = Student.objects.get(user=request.resource_owner)
+
+        student_serializer = StudentSerializer(student)
+
+        return JsonResponse(student_serializer.data, safe=False)
+
+
+    def create(self, request, *args, **kwargs):
+        body = request.data
+
+        name = body.get('name')
+        email = body.get('email')
+
+        student, created = Student.objects.get_or_create(name=name, email=email, user=request.resource_owner)
+
+        student_serializer = StudentSerializer(student, many=False)
+        print(student_serializer.data)
+
+        return JsonResponse(student_serializer.data, safe=False)
