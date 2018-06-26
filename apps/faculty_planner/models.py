@@ -242,6 +242,7 @@ class StudentSpecialization(models.Model):
     class Meta:
         verbose_name = _('Student Specialization')
         verbose_name_plural = _('Student Specializations')
+        unique_together = ('student', 'specialization')
 
     uuid = models.CharField(default=uuid.uuid4, null=True, max_length=256)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, )

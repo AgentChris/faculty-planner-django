@@ -1,6 +1,7 @@
 import json
 
 import pandas as pd
+from django.db.utils import IntegrityError
 from django.http import JsonResponse
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 from oauth2_provider.views import ProtectedResourceView
@@ -8,9 +9,10 @@ from rest_framework import mixins, viewsets, permissions
 from rest_framework.decorators import list_route
 
 from .models import StudentSuggestion, Specialization, Schedule, CourseDate, YearStructure, Faculty, Student, \
-    StudentSpecialization
+    StudentSpecialization, Group
 from .parse_fsega import get_specialization_website_url, add_professor_information
-from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer, StudentSerializer
+from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer, StudentSerializer, \
+    GroupSerializer
 from .services import store_specialization
 
 
@@ -198,7 +200,13 @@ class SpecializationView(mixins.ListModelMixin, ProtectedResourceView, viewsets.
         specialization = Specialization.objects.get(uuid=specialization_uuid)
         student = Student.objects.get(user=request.resource_owner)
 
-        StudentSpecialization.objects.create(specialization=specialization, student=student)
+        try:
+            StudentSpecialization.objects.create(specialization=specialization, student=student)
+        except IntegrityError as e:
+            return JsonResponse({"message": "You already added this specialization"}, safe=False)
+
         specialization_serializer = SpecializationSerializer(specialization, many=False)
 
         return JsonResponse(specialization_serializer.data, safe=False)
+
+
