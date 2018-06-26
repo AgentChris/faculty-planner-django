@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 from oauth2_provider.views import ProtectedResourceView
 from rest_framework import mixins, viewsets, permissions
-from rest_framework.decorators import list_route
+from rest_framework.decorators import detail_route
 
 from .models import StudentSuggestion, Specialization, Schedule, CourseDate, YearStructure, Faculty, Student, \
     StudentSpecialization, Group
@@ -192,12 +192,9 @@ class SpecializationView(mixins.ListModelMixin, ProtectedResourceView, viewsets.
 
         return JsonResponse(specializations_serializer.data, safe=False)
 
-    @list_route(methods=['post'])
-    def student(self, request, *args, **kwargs):
-        body = request.data
-
-        specialization_uuid = body.get('specialization')
-        specialization = Specialization.objects.get(uuid=specialization_uuid)
+    @detail_route(methods=['post'])
+    def assign_student(self, request, pk=None):
+        specialization = Specialization.objects.get(uuid=pk)
         student = Student.objects.get(user=request.resource_owner)
 
         try:
