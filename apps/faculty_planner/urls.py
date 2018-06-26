@@ -22,10 +22,10 @@ from . import views
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'student', views.StudentView)
+router.register(r'specialization', views.SpecializationView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^specialization/', views.get_specializations, name="get_specializations"),
     url(r'^schedule/', views.get_schedule_by_group, name="get_schedule_by_group"),
     url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
     url(r'^year_structures/', views.get_year_structures, name="year_structures"),

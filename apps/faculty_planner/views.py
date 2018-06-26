@@ -3,11 +3,12 @@ import json
 import pandas as pd
 from django.http import JsonResponse
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
-from oauth2_provider.decorators import rw_protected_resource
 from oauth2_provider.views import ProtectedResourceView
 from rest_framework import mixins, viewsets, permissions
+from rest_framework.decorators import list_route
 
-from .models import StudentSuggestion, Specialization, Schedule, CourseDate, YearStructure, Faculty, Student
+from .models import StudentSuggestion, Specialization, Schedule, CourseDate, YearStructure, Faculty, Student, \
+    StudentSpecialization
 from .parse_fsega import get_specialization_website_url, add_professor_information
 from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer, StudentSerializer
 from .services import store_specialization
@@ -109,16 +110,6 @@ def get_schedule_by_group(request, *args, **kwargs):
     return JsonResponse(response, safe=False)
 
 
-@rw_protected_resource()
-def get_specializations(request, *args, **kwargs):
-    faculty_param = request.GET.get('faculty')
-
-    specializations = Specialization.objects.filter(faculty__acronym=faculty_param)
-    specializations_serializer = SpecializationSerializer(specializations, many=True)
-
-    return JsonResponse(specializations_serializer.data, safe=False)
-
-
 def get_student_suggestion(request, *args, **kwargs):
     name_param = request.GET.get('name')
 
@@ -164,7 +155,7 @@ def get_year_structures(request, *args, **kwargs):
 class StudentView(mixins.RetrieveModelMixin, mixins.ListModelMixin, ProtectedResourceView, viewsets.GenericViewSet):
     queryset = Student.objects.all()
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-    serializer_class = SpecializationSerializer
+    serializer_class = Student
 
     def list(self, request, *args, **kwargs):
         student = Student.objects.get(user=request.resource_owner)
@@ -172,7 +163,6 @@ class StudentView(mixins.RetrieveModelMixin, mixins.ListModelMixin, ProtectedRes
         student_serializer = StudentSerializer(student)
 
         return JsonResponse(student_serializer.data, safe=False)
-
 
     def create(self, request, *args, **kwargs):
         body = request.data
@@ -183,6 +173,32 @@ class StudentView(mixins.RetrieveModelMixin, mixins.ListModelMixin, ProtectedRes
         student, created = Student.objects.get_or_create(name=name, email=email, user=request.resource_owner)
 
         student_serializer = StudentSerializer(student, many=False)
-        print(student_serializer.data)
 
         return JsonResponse(student_serializer.data, safe=False)
+
+
+class SpecializationView(mixins.ListModelMixin, ProtectedResourceView, viewsets.GenericViewSet):
+    queryset = Specialization.objects.all()
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    serializer_class = SpecializationSerializer
+
+    def list(self, request, *args, **kwargs):
+        faculty_param = request.GET.get('faculty')
+
+        specializations = Specialization.objects.filter(faculty__acronym=faculty_param)
+        specializations_serializer = SpecializationSerializer(specializations, many=True)
+
+        return JsonResponse(specializations_serializer.data, safe=False)
+
+    @list_route(methods=['post'])
+    def student(self, request, *args, **kwargs):
+        body = request.data
+
+        specialization_uuid = body.get('specialization')
+        specialization = Specialization.objects.get(uuid=specialization_uuid)
+        student = Student.objects.get(user=request.resource_owner)
+
+        StudentSpecialization.objects.create(specialization=specialization, student=student)
+        specialization_serializer = SpecializationSerializer(specialization, many=False)
+
+        return JsonResponse(specialization_serializer.data, safe=False)
