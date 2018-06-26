@@ -23,13 +23,14 @@ from . import views
 router = DefaultRouter()
 router.register(r'student', views.StudentView)
 router.register(r'specialization', views.SpecializationView)
+router.register(r'course_dates', views.CourseDatesView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^schedule/', views.get_schedule_by_group, name="get_schedule_by_group"),
-    url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
-    url(r'^year_structures/', views.get_year_structures, name="year_structures"),
-    url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
+    # url(r'^schedule/', views.get_schedule_by_group, name="get_schedule_by_group"),
+    # url(r'^parse/fsega/', views.scrape_faculty, name="parse_fsega"),
+    # url(r'^year_structures/', views.get_year_structures, name="year_structures"),
+    # url(r'^professor_data/', views.parse_professor_information, name="professor_data"),
     url(r'^', include(router.urls)),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 ]
