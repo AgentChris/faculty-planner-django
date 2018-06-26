@@ -156,9 +156,14 @@ class CourseDatesView(mixins.RetrieveModelMixin, mixins.ListModelMixin, Protecte
         group_uuid_param = request.GET.get('group')
         start_date_param = request.GET.get('start_date')
         end_date_param = request.GET.get('end_date')
+        only_dates_param = request.GET.get('only_dates')
 
         start_date = None
         end_date = None
+
+        only_dates = False
+        if only_dates_param == 'true':
+            only_dates = True
 
         if start_date_param:
             start_date = datetime.strptime(start_date_param, '%Y-%m-%d')
@@ -203,28 +208,31 @@ class CourseDatesView(mixins.RetrieveModelMixin, mixins.ListModelMixin, Protecte
                         if (start_date and single_date < start_date) or (end_date and single_date > end_date):
                             continue
 
-                        day_index = single_date.date().weekday()
-                        response_item = {"date": single_date.strftime("%Y-%m-%d"), "course_dates": []}
+                        if len(course_dates) > 0:
+                            day_index = single_date.date().weekday()
+                            response_item = {"date": single_date.strftime("%Y-%m-%d")}
 
-                        for course_date in course_dates:
-                            day_in_week = course_date.day_in_week
-                            parity_week = course_date.parity_week
+                            if not only_dates:
+                                response_item["course_dates"] = []
+                                for course_date in course_dates:
+                                    day_in_week = course_date.day_in_week
+                                    parity_week = course_date.parity_week
 
-                            # check to see if the current day is valid for the current course_date
-                            if parity_week == 'W' or (is_week_odd and parity_week == 'O') \
-                                or (not is_week_odd and parity_week == 'E'):
+                                    # check to see if the current day is valid for the current course_date
+                                    if parity_week == 'W' or (is_week_odd and parity_week == 'O') \
+                                        or (not is_week_odd and parity_week == 'E'):
 
-                                if day_in_week == 'MON' and day_index == 0 or \
-                                    day_in_week == 'TUES' and day_index == 1 or \
-                                    day_in_week == 'WED' and day_index == 2 or \
-                                    day_in_week == 'THURS' and day_index == 3 or \
-                                    day_in_week == 'FRI' and day_index == 4 or \
-                                    day_in_week == 'SAT' and day_index == 5 or \
-                                    day_in_week == 'SUN' and day_index == 6:
-                                    course_date_data = CourseDateSerializer(course_date, many=False)
-                                    response_item['course_dates'].append(course_date_data.data)
+                                        if day_in_week == 'MON' and day_index == 0 or \
+                                            day_in_week == 'TUES' and day_index == 1 or \
+                                            day_in_week == 'WED' and day_index == 2 or \
+                                            day_in_week == 'THURS' and day_index == 3 or \
+                                            day_in_week == 'FRI' and day_index == 4 or \
+                                            day_in_week == 'SAT' and day_index == 5 or \
+                                            day_in_week == 'SUN' and day_index == 6:
+                                            course_date_data = CourseDateSerializer(course_date, many=False)
+                                            response_item['course_dates'].append(course_date_data.data)
 
-                        response.append(response_item)
+                            response.append(response_item)
 
         return JsonResponse(response, safe=False)
 
