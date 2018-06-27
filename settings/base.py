@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'jsoneditor',
 
     # 3 party libraries
+    'corsheaders',
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
@@ -54,14 +55,21 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# cors config
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:19001',
+)
 
 ROOT_URLCONF = 'apps.faculty_planner.urls'
 
