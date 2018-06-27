@@ -15,6 +15,7 @@ from .models import StudentSuggestion, Specialization, Schedule, CourseDate, Yea
 from .parse_fsega import get_specialization_website_url, add_professor_information
 from .serializers import SpecializationSerializer, CourseDateSerializer, DayTypeSerializer, StudentSerializer
 from .services import store_specialization
+from .utils import SmallResultsSetPagination
 
 
 # from django.core.exceptions import ObjectDoesNotExist
@@ -123,14 +124,18 @@ class SpecializationView(mixins.ListModelMixin, ProtectedResourceView, viewsets.
     queryset = Specialization.objects.all()
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     serializer_class = SpecializationSerializer
+    pagination_class = SmallResultsSetPagination
 
-    def list(self, request, *args, **kwargs):
-        faculty_param = request.GET.get('faculty')
-
-        specializations = Specialization.objects.filter(faculty__acronym=faculty_param)
-        specializations_serializer = SpecializationSerializer(specializations, many=True)
-
-        return JsonResponse(specializations_serializer.data, safe=False)
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `faculty acronym` query parameter in the URL.
+        """
+        queryset = Specialization.objects.all()
+        faculty_param = self.request.query_params.get('faculty', None)
+        if faculty_param is not None:
+            queryset = queryset.filter(faculty__acronym=faculty_param)
+        return queryset
 
     @detail_route(methods=['post'])
     def assign_student(self, request, pk=None):

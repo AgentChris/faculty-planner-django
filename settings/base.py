@@ -87,6 +87,8 @@ WSGI_APPLICATION = 'wsgi.application'
 
 REST_FRAMEWORK = {
     # 'EXCEPTION_HANDLER': 'game.utils.custom_exception_handler'
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'oauth2_provider.ext.rest_framework.OAuth2Authentication',  # django-oauth-toolkit < 1.0.0
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
