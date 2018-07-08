@@ -217,7 +217,6 @@ class CourseDatesView(mixins.RetrieveModelMixin, mixins.ListModelMixin, Protecte
                             day_index = single_date.date().weekday()
                             response_item = {"date": single_date.strftime("%Y-%m-%d")}
 
-                            if not only_dates:
                                 response_item["course_dates"] = []
                                 for course_date in course_dates:
                                     day_in_week = course_date.day_in_week
@@ -237,6 +236,11 @@ class CourseDatesView(mixins.RetrieveModelMixin, mixins.ListModelMixin, Protecte
                                             course_date_data = CourseDateSerializer(course_date, many=False)
                                             response_item['course_dates'].append(course_date_data.data)
 
+                            has_course_dates = len(response_item['course_dates']) > 0
+                            if only_dates:
+                                del response_item['course_dates']
+
+                            if has_course_dates:
                             response.append(response_item)
 
         return JsonResponse(response, safe=False)
